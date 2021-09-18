@@ -2,15 +2,23 @@
   "name": "@ad/platform_request",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/adRequest.commonjs.js",
+  "module": "./dist/adRequest.es.js",
   "scripts": {
-    "build": "webpack --config ./webpack.config.dev.js --progress",
+    "build-commonjs": "webpack --env type=commonjs --config ./webpack.config.js --progress",
+    "build-es": "webpack --env type=es --config ./webpack.config.js --progress",
     "test": "jest --coverage",
     "test-dev": "jest --watch --coverage"
   },
   "repository": {
     "type": "git",
     "url": "git@code.byted.org:ad/platform_request.git"
+  },
+  "files": [
+    "./dist/*"
+  ],
+  "publishConfig": {
+    "registry": "http://bnpm.byted.org"
   },
   "author": "longjincen@bytedance.com",
   "license": "ISC",
@@ -23,6 +31,7 @@
     "ts-jest": "^27.0.4",
     "typescript": "^4.3.5",
     "webpack": "^5.46.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "webpack-cli": "^4.7.2",
     "webpack-merge": "^5.8.0"
   },
