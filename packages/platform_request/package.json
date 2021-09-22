@@ -12,7 +12,7 @@
     "url": "git@code.byted.org:ad/platform_request.git"
   },
   "files": [
-    "./dist/*"
+    "dist"
   ],
   "publishConfig": {
     "registry": "http://bnpm.byted.org"
