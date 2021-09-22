@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import * as requestInterceptors from './interceptors/request'
 import * as responseInterceptors from './interceptors/response'
 import { forEach } from 'lodash-es'
@@ -16,4 +16,6 @@ forEach(responseInterceptors, (value ,key) => {
   request.interceptors.response.use(value[0], value[1]);
 })
 
-export default request
+export default function<T = any> (config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  return request(config)
+}
