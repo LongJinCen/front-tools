@@ -5,6 +5,7 @@ export const baseInterceptors: interceptorsResponseConfig = [function (response)
   const { data, config, status } = response
   const code = data.code as number
   if(code === 40102){
+    // msg 挂到 data.msg 上
     data.msg = data.msg || RESPONSE_TEXT[code]
     return Promise.reject(response)
   }
@@ -22,6 +23,7 @@ export const baseInterceptors: interceptorsResponseConfig = [function (response)
 }, function (error) {
   const status = error?.response?.status || ''
   const errorMsg = STATUS_TEXT[status as STATUS_CODE] ? STATUS_TEXT[status as STATUS_CODE] : '网络异常，请刷新重试~'
+  // msg 挂到 data.msg 上
   error.response && (error.response.data.msg = errorMsg)
   return Promise.reject(error.response);
 }]
