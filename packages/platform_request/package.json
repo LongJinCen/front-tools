@@ -1,7 +1,7 @@
 {
   "name": "@ad/platform_request",
   "version": "1.2.3",
-  "description": "",
+  "description": "竞价平台平台请求封装",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
