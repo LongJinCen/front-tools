@@ -6,6 +6,12 @@ type RequestErrorCallback = (value: any) => any
 type ResponseCallback = (value: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>
 type ResponseErrorCallback = (value: AxiosError) => AxiosResponse | Promise<AxiosResponse>
 
-export type interceptorsRequestConfig = [RequestCallback, RequestErrorCallback]
+export type interceptorsRequestConfig = {
+  fufilled: RequestCallback,
+  reject?: RequestErrorCallback
+}
 
-export type interceptorsResponseConfig = [ResponseCallback, ResponseErrorCallback]
+export type interceptorsResponseConfig = {
+  fufilled: ResponseCallback,
+  reject?: ResponseErrorCallback
+}

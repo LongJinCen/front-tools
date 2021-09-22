@@ -8,12 +8,20 @@ const instance = axios.create()
 // post请求默认设置 Content-Type 为 json，这里会影响风控人机识别参数的获取，axios拦截器获取到的 config 不是最终的配置
 instance.defaults.headers.post['Content-Type'] = 'application/json';
 
-forEach(requestInterceptors, (value ,key) => {
-  instance.interceptors.request.use(value[0], value[1]);
+forEach(requestInterceptors, (value, key) => {
+  if (value.reject) {
+    instance.interceptors.request.use(value.fufilled, value.reject);
+  } else {
+    instance.interceptors.request.use(value.fufilled);
+  }
 })
 
 forEach(responseInterceptors, (value ,key) => {
-  instance.interceptors.response.use(value[0], value[1]);
+  if (value.reject) {
+    instance.interceptors.response.use(value.fufilled, value.reject);
+  } else {
+    instance.interceptors.response.use(value.fufilled)
+  }
 })
 
 const request = async <T = any> (config: AxiosRequestConfig): Promise<{ data: T }> => {
