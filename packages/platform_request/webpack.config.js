@@ -38,7 +38,9 @@ module.exports = (envs) => {
             {
               loader: 'ts-loader',
               options: {
-                compilerOptions: tsConfig[envs.type]
+                compilerOptions: {
+                  ...tsConfig[envs.type],
+                }
               }
             }
           ],
