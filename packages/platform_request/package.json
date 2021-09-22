@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/adRequest.commonjs.js",
   "module": "./dist/adRequest.es.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
