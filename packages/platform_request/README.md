@@ -1,7 +1,7 @@
 # @ad/platform_request
 将请求能力统一封装，方便后续统一维护与扩展
 ## Install
-`axios` 被当做外部依赖，版本兼容性为 `^0.21.4`
+`axios、@okee-uikit/vue3` 被当做外部依赖，版本兼容性为 `^0.21.4、^0.2.2`
 ```javascript
 npm i @ad/platform_request axios --save
 ```
@@ -35,5 +35,3 @@ export interface AxiosResponse<T = any>  {
 ```
 
 `request` 返回 `AxiosResponse.data`，`requestPlus` 返回整个 `AxiosResponse`。通常情况下使用这两个方法就够了。如果你想调用 `axios` 上的其他方法，使用暴露出来的 `axios` 变量即可
-
-

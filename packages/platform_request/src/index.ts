@@ -16,7 +16,7 @@ forEach(responseInterceptors, (value ,key) => {
   instance.interceptors.response.use(value[0], value[1]);
 })
 
-export const request = async <T = any> (config: AxiosRequestConfig): Promise<{ data: T }> => {
+const request = async <T = any> (config: AxiosRequestConfig): Promise<{ data: T }> => {
   let result
   try {
     result = await instance(config)
@@ -27,10 +27,12 @@ export const request = async <T = any> (config: AxiosRequestConfig): Promise<{ d
   return result.data
 }
 
-export const requestPlus = async <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<{ data: T }>> => {
+const requestPlus = async <T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<{ data: T }>> => {
   return instance(config)
 }
 
 export { 
+  request,
+  requestPlus,
   instance as axios
 }

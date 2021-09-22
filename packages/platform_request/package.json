@@ -44,6 +44,7 @@
     "qs": "^6.10.1"
   },
   "peerDependencies": {
-    "axios": "^0.21.4"
+    "axios": "^0.21.4",
+    "@okee-uikit/vue3": "^0.2.2"
   }
 }
