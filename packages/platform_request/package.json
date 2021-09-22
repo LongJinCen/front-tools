@@ -5,10 +5,7 @@
   "main": "./dist/adRequest.commonjs.js",
   "module": "./dist/adRequest.es.js",
   "scripts": {
-    "build-commonjs": "webpack --env type=commonjs --config ./webpack.config.js --progress",
-    "build-es": "webpack --env type=es --config ./webpack.config.js --progress",
-    "test": "jest --coverage",
-    "test-dev": "jest --watch --coverage"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -40,9 +37,12 @@
   },
   "dependencies": {
     "@byted/acrawler": "^1.6.8",
+    "axios": "^0.21.4",
     "js-cookie": "^3.0.1",
     "lodash-es": "^4.17.21",
-    "qs": "^6.10.1",
+    "qs": "^6.10.1"
+  },
+  "peerDependencies": {
     "axios": "^0.21.4"
   }
 }

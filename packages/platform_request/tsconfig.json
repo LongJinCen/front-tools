@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "target": "esnext",
+    "target": "es5",
     "module": "esnext",
     "strict": true,
     "baseUrl": ".",
@@ -11,7 +11,9 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "declaration": true
   },
   "include": ["src/**/*"]
 }
