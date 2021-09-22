@@ -47,7 +47,7 @@ module.exports = (envs) => {
       ]
     },
     resolve: {
-      extensions: ['.ts'],
+      extensions: ['.ts', '.js'],
       alias: {
         Src: path.resolve(__dirname, '../src')
       }

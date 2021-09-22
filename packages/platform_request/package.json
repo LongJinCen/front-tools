@@ -39,13 +39,10 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@byted/acrawler": "^2.1.6",
-    "axios": "^0.21.4",
+    "@byted/acrawler": "^1.6.8",
     "js-cookie": "^3.0.1",
     "lodash-es": "^4.17.21",
-    "qs": "^6.10.1"
-  },
-  "peerDependencies": {
+    "qs": "^6.10.1",
     "axios": "^0.21.4"
   }
 }
