@@ -1,6 +1,6 @@
 {
   "name": "@ad/platform_request",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "./dist/adRequest.commonjs.js",
   "module": "./dist/adRequest.es.js",
