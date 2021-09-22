@@ -13,7 +13,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*"]
 }
