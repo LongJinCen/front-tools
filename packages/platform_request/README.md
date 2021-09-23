@@ -5,21 +5,47 @@
 ```javascript
 npm i @ad/platform_request axios @okee-uikit/vue3 --save
 ```
+## Feature
+- 为 url 自动添加 `aadvid`
+- 添加 `token`
+- 添加风控人机识别参数 `_signature`
+- `request、response` 泛型支持
+- `response` 常见错误处理
 ## UseAge
-总共暴露了三个变量，底层都是使用的 `axios.create()` 创建的实例，并且都应用了 `src/interceptors` 下的拦截器，可根据情况自行选用
+总共暴露了两个个变量，底层都是使用的 `axios.create()` 创建的实例，并且都应用了 `src/interceptors` 下的拦截器，可根据情况自行选用。
 
 ```javascript
-import { request, requestPlus, axios } from '@ad/platform_request'
+import { request, requestPlus } from '@ad/platform_request'
 
-interface Reponse {}
+interface IReponse {}
+interface IRequest {}
+// service.ts
+const func1 = request<IRequest, IReponse>(AxiosRequestConfig)
+const func2 = requestPlus<IRequest, IReponse>(AxiosRequestConfig)
+// index.ts
+import { func1, func2 } from './service.ts'
 
-const response = await request<Reponse>(config)
-const response1 = await requestPlus<Reponse>(config)
+const result1 = await func1(data)
+const result2 = await func2(data)
 
-const response2 = await axios(config)
 ```
 
-> `request、requestPlus` 支持通过泛型设置返回值，`axios` 则不支持。
+在极少数情况下，请求可能需要缓存，可以使用 `useCache` 方法来包裹一层，`useCache` 会根据请求的 `param、body` 作为 `key`，如果 key 没变，返回上次的请求结果，否则重新请求。
+```javascript
+import { request, requestPlus, useCache } from '@ad/platform_request'
+
+interface IReponse {}
+interface IRequest {}
+// service.ts
+const func1 = useCache(request<IRequest, IReponse>(AxiosRequestConfig))
+const func2 = useCache(requestPlus<IRequest, IReponse>(AxiosRequestConfig))
+// index.ts
+import { func1, func2 } from './service.ts'
+
+const result1 = await func1(data)
+const result2 = await func2(data)
+
+```
 
 `axios` 在未经过处理的情况下，返回值的格式如下：
 
@@ -34,4 +60,7 @@ export interface AxiosResponse<T = any>  {
 }
 ```
 
-`request` 返回 `AxiosResponse.data`，`requestPlus` 返回整个 `AxiosResponse`。通常情况下使用这两个方法就够了。如果你想调用 `axios` 上的其他方法，使用暴露出来的 `axios` 变量即可
+`request` 返回 `AxiosResponse.data.data`，`requestPlus` 返回整个 `AxiosResponse`。
+
+## handle Error
+当接口发生错误时会自动提示 message，外部不需要处理，否则会重复，错误会被抛出，因此在调用时，应该加上 `try、catch`

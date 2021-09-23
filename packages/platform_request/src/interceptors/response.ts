@@ -6,14 +6,14 @@ export const baseInterceptors: interceptorsResponseConfig = {
   fufilled: function (response) {
     const { data, config, status } = response
     const code = data.code as number
+    // 如果user-adv鉴权未通过
     if(code === 40102){
-      // msg 挂到 data.msg 上
       const errorMsg = data.msg || RESPONSE_TEXT[code]
       Message.danger(errorMsg)
       return Promise.reject(response)
     }
     if (code !== 0 && ![200, 'success', 'SUCCESS'].includes(data.status)) {
-      // 如果接口返回错误
+      // 如果接口返回未登录
       if (code === 40001) {
         const redirectUrl = data.extra && data.extra.redirect_url || '/pages/login/index.html'
         window.location.href = redirectUrl
