@@ -3,7 +3,7 @@
 ## Install
 `axios、@okee-uikit/vue3` 被当做外部依赖，版本兼容性为 `^0.21.4、^0.2.2`
 ```javascript
-npm i @ad/platform_request axios --save
+npm i @ad/platform_request axios @okee-uikit/vue3 --save
 ```
 ## UseAge
 总共暴露了三个变量，底层都是使用的 `axios.create()` 创建的实例，并且都应用了 `src/interceptors` 下的拦截器，可根据情况自行选用
