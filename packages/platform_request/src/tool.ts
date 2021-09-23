@@ -115,3 +115,18 @@ export const parseUrl = function (url?: string): URL {
   }
   return arr.join('&')
 }
+
+/**
+ * 更新URL query 并在query中添加 aadvid
+ * @param {string} href 原始URL
+ * @param {object} queryObj 需要增加的 query 信息
+ * @returns {string} query中携带了aadvid和queryObj的URL
+ */
+ export const updateQueryWithAdvid = function (href: string, queryObj: object = {}) {
+  if (!href) {
+    return href
+  }
+  const query = queryToJson(location.search)
+  const aadvidObj = { aadvid: query.aadvid || '' }
+  return addOrReplaceParam(href, { ...aadvidObj, ...queryObj })
+}
