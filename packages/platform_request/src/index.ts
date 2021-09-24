@@ -30,7 +30,7 @@ forEach(responseInterceptors, (value ,key) => {
 const cancleMap = new Map<Promise<any>, CancelTokenSource>()
 
 interface ICancleable {
-  cancleable: boolean
+  cancleable?: boolean
 }
 
 /**
@@ -89,7 +89,7 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
 const abort = (promise: Promise<any>) => {
   const source = cancleMap.get(promise)
   if (source) {
-    source.cancel()
+    source.cancel('请求被取消')
     cancleMap.delete(promise)
   }
 }

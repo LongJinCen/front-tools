@@ -28,7 +28,7 @@ export const baseInterceptors: interceptorsResponseConfig = {
   reject: function (error) {
     if (axios.isCancel(error)) {
       console.log('request canceled: ', error)
-      return
+      return Promise.reject(error)
     }
     const status = error?.response?.status || ''
     const errorMsg = STATUS_TEXT[status as STATUS_CODE] ? STATUS_TEXT[status as STATUS_CODE] : '网络异常，请刷新重试~'
