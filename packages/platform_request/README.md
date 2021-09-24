@@ -107,9 +107,8 @@ try {
   console.log(error)
 }
 
-`useDebounce` 是针对已发送的请求的防抖，会对已发送的请求进行取消，与平时常见的防抖不一样
-
 ```
+`useDebounce` 是针对已发送的请求的防抖，会对已发送的请求进行取消，与平时常见的防抖不一样
 ### abort
 当发送了某一个请求后，可以取消。不能使用 `async、await`
 ```typescript
