@@ -4,7 +4,7 @@ type RequestCallback = (value: AxiosRequestConfig) => AxiosRequestConfig | Promi
 type RequestErrorCallback = (value: any) => any
 
 type ResponseCallback = (value: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>
-type ResponseErrorCallback = (value: AxiosError) => AxiosResponse | Promise<AxiosResponse>
+type ResponseErrorCallback = (value: AxiosError) => AxiosResponse | Promise<AxiosResponse> | undefined
 
 export type interceptorsRequestConfig = {
   fufilled: RequestCallback,

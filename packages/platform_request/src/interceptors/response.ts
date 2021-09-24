@@ -1,6 +1,7 @@
 import { interceptorsResponseConfig } from "Src/types/interceptors"
 import { RESPONSE_CODE, RESPONSE_TEXT, STATUS_CODE, STATUS_TEXT } from "../const"
 import { Message } from '@okee-uikit/vue3'
+import axios from 'axios'
 
 export const baseInterceptors: interceptorsResponseConfig = {
   fufilled: function (response) {
@@ -25,6 +26,10 @@ export const baseInterceptors: interceptorsResponseConfig = {
     return response
   },
   reject: function (error) {
+    if (axios.isCancel(error)) {
+      console.log('request canceled: ', error)
+      return
+    }
     const status = error?.response?.status || ''
     const errorMsg = STATUS_TEXT[status as STATUS_CODE] ? STATUS_TEXT[status as STATUS_CODE] : '网络异常，请刷新重试~'
     Message.danger(errorMsg)

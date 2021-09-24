@@ -1,11 +1,12 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
 import * as requestInterceptors from './interceptors/request'
 import * as responseInterceptors from './interceptors/response'
 import { forEach } from 'lodash-es'
+const CancelToken = axios.CancelToken
 
 const instance = axios.create()
 
-// post请求默认设置 Content-Type 为 json，这里会影响风控人机识别参数的获取，axios拦截器获取到的 config 不是最终的配置
+// post请求默认设置 Content-Type 为 json
 instance.defaults.headers.post['Content-Type'] = 'application/json';
 
 // 请求拦截器
@@ -26,27 +27,34 @@ forEach(responseInterceptors, (value ,key) => {
   }
 })
 
+const cancleMap = new Map<Promise<any>, CancelTokenSource>()
+
+interface ICancleable {
+  cancleable: boolean
+}
+
 /**
  * @description
  *  - 常规方法，直接返回最终的 data
  * @param config 
  * @returns {Promise<R>}
  */
-const request = <T = any, R = any>(config: AxiosRequestConfig) => async (value: T): Promise<R> => {
+const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<R> => {
   if (['GET', 'get'].includes(config.method as string)) {
     config.params = value
   } else {
     config.data = value
   }
-
-  let result
-  try {
-    result = await instance(config)
-  } catch (error) {
-    result = { data: { data: {} } }
-    return Promise.reject(error)
+  let source
+  if (config.cancleable) {
+    source = CancelToken.source()
+    config.cancelToken = source.token
   }
-  return result.data.data
+  let result = instance(config).then(res => res.data.data)
+  if (config.cancleable) {
+    cancleMap.set(result, source as CancelTokenSource)
+  }
+  return result
 }
 
 /**
@@ -55,18 +63,40 @@ const request = <T = any, R = any>(config: AxiosRequestConfig) => async (value: 
  * @param config
  * @returns {AxiosResponse<{ data: R }>}
  */
- const requestPlus = <T = any, R = any>(config: AxiosRequestConfig) => async (value: T): Promise<AxiosResponse<{ data: R }>> => {
+ const requestPlus = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<AxiosResponse<{ data: R }>> => {
   if (['GET', 'get'].includes(config.method as string)) {
     config.params = value
   } else {
     config.data = value
   }
-  return instance(config)
+  let source
+  if (config.cancleable) {
+    source = CancelToken.source()
+    config.cancelToken = source.token
+  }
+  let result = instance(config)
+  if (config.cancleable) {
+    cancleMap.set(result, source as CancelTokenSource)
+  }
+  return result
 }
 
 /**
  * @description
- *  - 当需要对某一个函数做缓存时，用该函数包裹一层
+ *  - 取消某一个请求
+ * @param promise 
+ */
+const abort = (promise: Promise<any>) => {
+  const source = cancleMap.get(promise)
+  if (source) {
+    source.cancel()
+    cancleMap.delete(promise)
+  }
+}
+
+/**
+ * @description
+ *  - 当需要对某一个请求做缓存时，用该函数包裹一层
  *  - 如果请求体没变，返回上次的请求结果，否则重新请求
  * @param func
  * @returns {function}
@@ -75,31 +105,58 @@ const useCache = <
   F extends (value: any) => Promise<any>,
   T = F extends (value: infer K) => Promise<any> ? K : any,
   R = F extends (value: any) => Promise<infer K> ? K : any
->(func: F) => async (value: T): Promise<R> => {
+>(func: F) => {
+
   const cacheResult = new Map<string, R>()
   const cachePromise = new Map<string, Promise<R>>()
 
-  const cachekey = JSON.stringify(value)
-  // 如果命中缓存直接返回
-  if (cacheResult.has(cachekey)) {
-    return cacheResult.get(cachekey) as R
+  return async (value: T): Promise<R> => {
+    const cachekey = JSON.stringify(value)
+    // 如果命中缓存直接返回
+    if (cacheResult.has(cachekey)) {
+      return cacheResult.get(cachekey) as R
+    }
+    // 如果有其他正在请求中,直接返回请求中promise
+    if (cachePromise.has(cachekey)) {
+      return cachePromise.get(cachekey) as Promise<R>
+    }
+  
+    const promise = func(value).then(res => {
+      cacheResult.set(cachekey, res as R)
+      return res
+    }).finally(() => cachePromise.delete(cachekey))
+  
+    cachePromise.set(cachekey, promise as Promise<R>)
+    return promise as Promise<R>
   }
-  // 如果有其他正在请求中,直接返回请求中promise
-  if (cachePromise.has(cachekey)) {
-    return cachePromise.get(cachekey) as Promise<R>
+}
+
+/**
+ * @description
+ *  - 当需要对某一个请求做防抖，用该函数包一层
+ * @param func
+ * @returns {function}
+ */
+const useDebounce = <
+  F extends (value: any) => Promise<any>,
+  T = F extends (value: infer K) => Promise<any> ? K : any,
+  R = F extends (value: any) => Promise<infer K> ? K : any
+  >(func: F) => {
+  const cachePromise: Promise<any>[] = []
+
+  return (value: T): Promise<R> => {
+    cachePromise.forEach(promise => abort(promise))
+    cachePromise.length = 0
+    const promise = func(value)
+    cachePromise.push(promise)
+    return promise
   }
-
-  const promise = func(value).then(res => {
-    cacheResult.set(cachekey, res as R)
-    return res
-  }).finally(() => cachePromise.delete(cachekey))
-
-  cachePromise.set(cachekey, promise as Promise<R>)
-  return promise as Promise<R>
 }
 
 export {
   request,
   requestPlus,
-  useCache
+  abort,
+  useCache,
+  useDebounce
 }
