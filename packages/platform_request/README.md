@@ -113,7 +113,7 @@ try {
 ### abort
 当发送了某一个请求后，可以取消。不能使用 `async、await`
 ```typescript
-import { request, useDebounce } from '@ad/platform_request'
+import { request, useDebounce, abort } from '@ad/platform_request'
 
 // service.ts
 interface IRequest {}
@@ -122,7 +122,7 @@ interface IResponse {}
 const getDetail = useDebounce(request<IRequest, IResponse>({ url: '', method: '', cancleable: true }))
 
 // xxx.ts
-import { getDetail, abort } from './service.ts'
+import { getDetail } from './service.ts'
 
 const data = {}
 
