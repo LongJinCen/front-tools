@@ -1,0 +1,34 @@
+{
+  "name": "@ad/eslint-plugin-ad",
+  "version": "1.0.0",
+  "description": "投放平台 eslint 规则集",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@code.byted.org/ad/platform_eslint"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "longjincen.try@bytedance.com",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  },
+  "peerDependencies": {
+    "eslint": "^7.32.0"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-vue": "^7.18.0",
+    "vue-eslint-parser": "^7.11.0"
+  }
+}

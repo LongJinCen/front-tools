@@ -1,0 +1,8 @@
+######################
+.DS_Store
+.DS_Store?
+# Custom - Dependencies #
+node_modules
+.vscode
+# Custom - Build #
+dist
