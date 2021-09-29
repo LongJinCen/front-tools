@@ -27,7 +27,7 @@ export = {
     // 不能使用 any
     '@typescript-eslint/no-explicit-any': ['error'],
     // 不允许使用 ts-ignore
-    '@typescript-eslint/ban-ts-ignore': 'error',
+    '@typescript-eslint/ban-ts-comment': 'error',
     '@typescript-eslint/naming-convention': [
       'error',
       {

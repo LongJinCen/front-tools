@@ -1,6 +1,6 @@
 export = {
   extends: [
-    './_typescript.js',
-    './_vue3.js'
+    './config/_typescript.js',
+    './config/_vue3.js'
   ],
 }

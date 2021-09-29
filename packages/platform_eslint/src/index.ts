@@ -1,6 +1,6 @@
 import nodeCore from './config/node-core'
-import platformComponent from './config/_vue3'
-import platformFuture from './config/_vue3'
+import platformComponent from './config/platform-component'
+import platformFuture from './config/platform-future'
 
 export = {
   rules: {
