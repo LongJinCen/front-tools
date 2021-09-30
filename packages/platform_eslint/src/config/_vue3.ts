@@ -3,7 +3,7 @@ export = {
     'vue'
   ],
   extends: [
-    'plugin:vue/vue3-recommended'
+    'plugin:vue/vue3-recommended',
   ],
   env: {
     browser: true,
@@ -25,7 +25,6 @@ export = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  ignorePatterns: ['*.js', '*.md'],
   rules: {
     'vue/component-definition-name-casing': ['error', 'kebab-case'],
     'vue/max-attributes-per-line': [2, {

@@ -6,7 +6,7 @@ export = {
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'airbnb-base',
-    'airbnb-typescript/base',
+    'airbnb-typescript/base'
   ],
   env: {
     jest: true,
@@ -21,7 +21,6 @@ export = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  ignorePatterns: ['*.js', '*.md'],
   rules: {
     'no-unsafe-optional-chaining': ['error'],
     // 不能使用 any
