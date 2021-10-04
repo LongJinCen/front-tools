@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git@code.byted.org:ad/platform_request.git"
   },
+  "homepage": "https://code.byted.org/ad/platform_request",
   "files": [
     "dist"
   ],
