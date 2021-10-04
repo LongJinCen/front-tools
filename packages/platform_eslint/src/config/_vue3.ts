@@ -17,7 +17,7 @@ export = {
   parser: "vue-eslint-parser",
   parserOptions: {
     parser: "@typescript-eslint/parser",
-    //
+    // 默认包含 .ts、.d.ts
     extraFileExtensions: [".vue"],
     // 传递 project 传递 @typescript-eslint 提供的额外的依赖类型的检查。缺点是会导致 eslint 整体检查过程会比较慢
     project: ["./tsconfig.json"],
