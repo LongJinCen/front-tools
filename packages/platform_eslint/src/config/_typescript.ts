@@ -21,6 +21,7 @@ export = {
     sourceType: "module",
   },
   rules: {
+    // 不允许不安全的可选料。例如 a?.b()
     "no-unsafe-optional-chaining": ["error"],
     // 不能使用 any
     "@typescript-eslint/no-explicit-any": ["error"],
@@ -45,21 +46,11 @@ export = {
         suffix: ["Enum"],
       },
     ],
-    "vue/max-attributes-per-line": [
-      2,
-      {
-        singleline: 20,
-        multiline: {
-          max: 1,
-          allowFirstLine: false,
-        },
-      },
-    ],
-    // 复写 airbnb-base 插件内的该配置，不允许给函数的 params 重新复制，但可以修改其属性
+    // 复写 airbnb-base 插件内的该配置。不允许给函数的 params 重新赋值，但可以修改其属性
     "no-param-reassign": ["error", { props: false }],
-    // 复写 airbnb-base 插件内的该配置
+    // 复写 airbnb-base 插件内的该配置。
     "import/prefer-default-export": "off",
-    // 复写 airbnb-typescript/base 插件内的该配置
+    // 复写 airbnb-typescript/base 插件内的该配置。允许使用使用短路逻辑进行有效的函数执行。A && B()、A || B()
     "@typescript-eslint/no-unused-expressions": [
       "error",
       {
@@ -68,13 +59,15 @@ export = {
         allowTaggedTemplates: false,
       },
     ],
-    // 复写 airbnb-base 插件内的该配置
+    // 复写 airbnb-base 插件内的该配置。可以在三元运算符内嵌套三元运算符
     "no-nested-ternary": "off",
-    // 复写 airbnb-base 插件内的该配置
+    // 复写 airbnb-base 插件内的该配置。可以使用 _ 进行命名
     "no-underscore-dangle": "off",
-    // 复写 @typescript-eslint/recommended-requiring-type-checking 中的该规则
+    // 复写 @typescript-eslint/recommended-requiring-type-checking 中的该规则。该规则要求必须对 promise 的返回值进行处理，通过 void Promise 可以标识不进行处理
     "@typescript-eslint/no-floating-promises": ["error", { ignoreVoid: true }],
     // 复写 airbnb-base 插件内的该配置
     "no-void": ["error", { allowAsStatement: true }],
+    // 复写 airbnb-base 插件内的该配置。关闭要求函数必须有返回值的规则
+    "consistent-return": "off",
   },
 };
