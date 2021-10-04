@@ -11,6 +11,7 @@
     "type": "git",
     "url": "ssh://git@code.byted.org/ad/platform_eslint"
   },
+  "homepage": "https://code.byted.org/ad/platform_eslint",
   "files": [
     "dist"
   ],
