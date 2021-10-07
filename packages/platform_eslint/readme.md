@@ -1,21 +1,23 @@
 # @ad/eslint-plugin-ad
 
+所有的 ts [rule](./dist/rules/_typescript-all.js)，vue 的待更新
+
 # Table of content
 
-- [Table of content](#Table of content)
-- [motivation](#motivation)
-- [Design](#Design)
-- [UseAge](#UseAge)
-  - [Install](#Install)
-  - [Config](#Config)
-  - [Build](#Build)
-  - [CI](#CI)
-  - [Give it a try](#Give it a try)
-  - [History Code](#History Code)
-- [Implementation details](#Implementation details)
-  - [What rules should we apply](#What rules should we apply)
-  - [Prettier](#Prettier)
-  - [Compatibility with our own projects](#Compatibility with our own projects)
+- **Table of content**
+- **motivation**
+- **Design**
+- **UseAge**
+  - **Install**
+  - **Config**
+  - **Build**
+  - **CI**
+  - **Give it a try**
+  - **History Code**
+- **Implementation details**
+  - **What rules should we apply**
+  - **Prettier**
+  - **Compatibility with our own projects**
 
 ## motivation
 
@@ -213,4 +215,4 @@ Prettier 专注于第一点格式，因此 eslint 与 Prettier 的确有重叠�
 
 ### Compatibility with our own projects
 
-外部提供的规则不一定适用于咱们自身的项目，因此会有一些规则存在一些差异，在 `platform_component` 的接入过程中，已经积累了一些跟外部提供的配置冲突的部分，并对其做了覆写，因此大部分情况下是适用的，如果在项目中遇到了其他不适用的规则，**请反馈给我进行更新**，而不是在项目中自己手动覆盖，这样背离了统一收敛咱们的 eslint 规范的原则，希望通过不断的积累，最终沉淀出更加适合咱们团队的一套规范
+外部提供的规则集合不一定适用于咱们自身的项目，因此会有一些规则存在一些差异，在 `platform_component` 的接入过程中，已经积累了一些跟外部规则的配置冲突的 case，并对其做了覆写，因此大部分情况下该插件的是适用的，如果在项目中遇到了其他不适用的规则，**请反馈给我进行更新**，而不是在项目中自己手动覆盖，这样背离了统一收敛咱们的 eslint 规范的原则，希望通过不断的积累，最终沉淀出更加适合咱们团队的一套规范

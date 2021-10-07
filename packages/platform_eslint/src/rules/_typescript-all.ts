@@ -17,9 +17,6 @@ export default {
     },
   ],
 
-  // require return statements to either always or never specify values
-  "consistent-return": "error",
-
   // specify curly brace conventions for all control statements
   curly: ["error", "multi-line"], // multiline
 
@@ -121,7 +118,7 @@ export default {
   "no-param-reassign": [
     "error",
     {
-      props: true,
+      props: false,
       ignorePropertyModificationsFor: [
         "acc", // for reduce accumulators
         "accumulator", // for reduce accumulators
@@ -235,10 +232,6 @@ export default {
   // disallow redundant return; keywords
   // https://eslint.org/docs/rules/no-useless-return
   "no-useless-return": "error",
-
-  // disallow use of void operator
-  // https://eslint.org/docs/rules/no-void
-  "no-void": "error",
 
   // disallow use of the with statement
   "no-with": "error",
@@ -667,9 +660,6 @@ export default {
   // https://eslint.org/docs/rules/no-multiple-empty-lines
   "no-multiple-empty-lines": ["error", { max: 1, maxBOF: 0, maxEOF: 0 }],
 
-  // disallow nested ternary expressions
-  "no-nested-ternary": "error",
-
   // disallow use of the Object constructor
   "no-new-object": "error",
 
@@ -715,18 +705,6 @@ export default {
     {
       skipBlankLines: false,
       ignoreComments: false,
-    },
-  ],
-
-  // disallow dangling underscores in identifiers
-  // https://eslint.org/docs/rules/no-underscore-dangle
-  "no-underscore-dangle": [
-    "error",
-    {
-      allow: [],
-      allowAfterThis: false,
-      allowAfterSuper: false,
-      enforceInMethodNames: true,
     },
   ],
 
@@ -901,11 +879,9 @@ export default {
   /** -------- typescript-eslint 插件的规则 ---------**/
 
   "@typescript-eslint/adjacent-overload-signatures": "error",
-  "@typescript-eslint/ban-ts-comment": "error",
   "@typescript-eslint/ban-types": "error",
   "@typescript-eslint/explicit-module-boundary-types": "warn",
   "@typescript-eslint/no-empty-interface": "error",
-  "@typescript-eslint/no-explicit-any": "warn",
   "@typescript-eslint/no-extra-non-null-assertion": "error",
   "@typescript-eslint/no-inferrable-types": "error",
   "@typescript-eslint/no-misused-new": "error",
@@ -918,7 +894,6 @@ export default {
   "@typescript-eslint/prefer-namespace-keyword": "error",
   "@typescript-eslint/triple-slash-reference": "error",
   "@typescript-eslint/await-thenable": "error",
-  "@typescript-eslint/no-floating-promises": "error",
   "@typescript-eslint/no-for-in-array": "error",
   "@typescript-eslint/no-misused-promises": "error",
   "@typescript-eslint/no-unnecessary-type-assertion": "error",
@@ -1045,10 +1020,6 @@ export default {
   // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/newline-after-import.md
   "import/newline-after-import": "error",
 
-  // Require modules with a single export to use a default export
-  // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md
-  "import/prefer-default-export": "error",
-
   // Forbid import of modules using absolute paths
   // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-absolute-path.md
   "import/no-absolute-path": "error",
@@ -1104,29 +1075,6 @@ export default {
     "1tbs",
     { allowSingleLine: true },
   ], // enforce one true brace style
-
-  // Replace Airbnb 'camelcase' rule with '@typescript-eslint/naming-convention'
-  // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/naming-convention.md
-  camelcase: "off",
-  // The `@typescript-eslint/naming-convention` rule allows `leadingUnderscore` and `trailingUnderscore` settings. However, the existing `no-underscore-dangle` rule already takes care of this.
-  "@typescript-eslint/naming-convention": [
-    "error",
-    // Allow camelCase variables (23.2), PascalCase variables (23.8), and UPPER_CASE variables (23.10)
-    {
-      selector: "variable",
-      format: ["camelCase", "PascalCase", "UPPER_CASE"],
-    },
-    // Allow camelCase functions (23.2), and PascalCase functions (23.8)
-    {
-      selector: "function",
-      format: ["camelCase", "PascalCase"],
-    },
-    // Airbnb recommends PascalCase for classes (23.3), and although Airbnb does not make TypeScript recommendations, we are assuming this rule would similarly apply to anything "type like", including interfaces, type aliases, and enums
-    {
-      selector: "typeLike",
-      format: ["PascalCase"],
-    },
-  ],
 
   // Replace Airbnb 'comma-dangle' rule with '@typescript-eslint' version
   // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/comma-dangle.md
@@ -1314,18 +1262,6 @@ export default {
   "no-throw-literal": "off",
   "@typescript-eslint/no-throw-literal": "error",
 
-  // Replace Airbnb 'no-unused-expressions' rule with '@typescript-eslint' version
-  // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-unused-expressions.md
-  "no-unused-expressions": "off",
-  "@typescript-eslint/no-unused-expressions": [
-    "error",
-    {
-      allowShortCircuit: false,
-      allowTernary: false,
-      allowTaggedTemplates: false,
-    },
-  ],
-
   // Replace Airbnb 'no-unused-vars' rule with '@typescript-eslint' version
   // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-unused-vars.md
   "no-unused-vars": "off",
@@ -1383,4 +1319,70 @@ export default {
   // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/object-curly-spacing.md
   "object-curly-spacing": "off",
   "@typescript-eslint/object-curly-spacing": ["error", "always"],
+
+  /** ------ 项目中复写的规则 ------- */
+
+  // 不允许不安全的可选料。例如 a?.b()
+  "no-unsafe-optional-chaining": ["error"],
+  // 不能使用 any
+  "@typescript-eslint/no-explicit-any": ["error"],
+  // 不允许使用 ts-ignore
+  "@typescript-eslint/ban-ts-comment": "error",
+  // interface、type、enum 命名规则
+  "@typescript-eslint/naming-convention": [
+    "error",
+    {
+      selector: "interface",
+      format: ["PascalCase"],
+      prefix: ["I"],
+    },
+    {
+      selector: "typeAlias",
+      format: ["PascalCase"],
+      prefix: ["T"],
+    },
+    {
+      selector: "enum",
+      format: ["PascalCase"],
+      suffix: ["Enum"],
+    },
+    // Allow camelCase variables (23.2), PascalCase variables (23.8), and UPPER_CASE variables (23.10)
+    {
+      selector: "variable",
+      format: ["camelCase", "PascalCase", "UPPER_CASE"],
+    },
+    // Allow camelCase functions (23.2), and PascalCase functions (23.8)
+    {
+      selector: "function",
+      format: ["camelCase", "PascalCase"],
+    },
+    // Airbnb recommends PascalCase for classes (23.3), and although Airbnb does not make TypeScript recommendations, we are assuming this rule would similarly apply to anything "type like", including interfaces, type aliases, and enums
+    {
+      selector: "typeLike",
+      format: ["PascalCase"],
+    },
+  ],
+  // 复写 airbnb-base 插件内的该配置。不允许给函数的 params 重新赋值，但可以修改其属性
+  // "no-param-reassign": ["error", { props: false }],
+  // 复写 airbnb-base 插件内的该配置。
+  "import/prefer-default-export": "off",
+  // 复写 airbnb-typescript/base 插件内的该配置。允许使用使用短路逻辑进行有效的函数执行。A && B()、A || B()
+  "@typescript-eslint/no-unused-expressions": [
+    "error",
+    {
+      allowShortCircuit: true,
+      allowTernary: true,
+      allowTaggedTemplates: false,
+    },
+  ],
+  // 复写 airbnb-base 插件内的该配置。可以在三元运算符内嵌套三元运算符
+  "no-nested-ternary": "off",
+  // 复写 airbnb-base 插件内的该配置。可以使用 _ 进行命名
+  "no-underscore-dangle": "off",
+  // 复写 @typescript-eslint/recommended-requiring-type-checking 中的该规则。该规则要求必须对 promise 的返回值进行处理，通过 void Promise 可以标识不进行处理
+  "@typescript-eslint/no-floating-promises": ["error", { ignoreVoid: true }],
+  // 复写 airbnb-base 插件内的该配置
+  "no-void": ["error", { allowAsStatement: true }],
+  // 复写 airbnb-base 插件内的该配置。关闭要求函数必须有返回值的规则
+  "consistent-return": "off",
 };
