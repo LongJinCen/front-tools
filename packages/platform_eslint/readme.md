@@ -1,6 +1,6 @@
 # @ad/eslint-plugin-ad
 
-所有的 ts [rule](./dist/rules/_typescript-all.js)，vue 的待更新
+所有的 ts [rule](https://code.byted.org/ad/platform_eslint/blob/feature/lint/src/rules/_typescript-all.ts)，vue 的待更新
 
 # Table of content
 
