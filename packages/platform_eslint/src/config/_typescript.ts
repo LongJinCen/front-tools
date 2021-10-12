@@ -69,5 +69,21 @@ export = {
     "no-void": ["error", { allowAsStatement: true }],
     // 复写 airbnb-base 插件内的该配置。关闭要求函数必须有返回值的规则
     "consistent-return": "off",
+    // 复写 airbnb-typescript/base 中该规则。去掉不能使用 for of 的限制
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'ForInStatement',
+        message: 'for..in loops iterate over the entire prototype chain, which is virtually never what you want. Use Object.{keys,values,entries}, and iterate over the resulting array.',
+      },
+      {
+        selector: 'LabeledStatement',
+        message: 'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.',
+      },
+      {
+        selector: 'WithStatement',
+        message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
+      },
+    ],
   },
 };
