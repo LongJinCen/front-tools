@@ -1,6 +1,6 @@
 {
   "name": "@ad/eslint-plugin-ad",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "投放平台 eslint 规则集",
   "main": "dist/index.js",
   "module": "dist/index.js",
