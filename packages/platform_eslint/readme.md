@@ -52,7 +52,7 @@ npm i @ad/eslint-plugin-ad --save-dev
 npm i prettier --save-dev --save-exact
 ```
 
-安装 **prettier vscode** 对应的插件，然后打开 VsCode 的 setting.json 文件在尾部添加如下配置，并重启 VsCode
+安装 **prettier vscode** 对应的插件，并且在当前项目中新建 .vscode/setting.json 文件，并在尾部添加如下配置
 
 ```json
 // 将默认的 formatter 设置为 prettier
@@ -143,13 +143,14 @@ npm i lint-staged --save-dev
 
 ```json
 "lint-staged": {
-    "src/**/*.{ts,tsx,vue}": "eslint"
+    "src/**/*.{ts,tsx,vue}": "eslint",
+    "**/*": "prettier --write --ignore-unknown"
 }
 ```
 
 ### Give it a try
 
-现在试着去编辑某一个文件，保存后会自动格式化当前文件的代码，整个项目中会有严格的 eslint 检查，并且在 build、commit 的过程中都会使用 eslint 进行检查，如果未通过，会报错。
+现在试着去编辑某一个文件，保存后会自动格式化当前文件的代码，整个项目中会有严格的 eslint 检查，并且在 build、commit 的过程中都会使用 eslint 进行检查，使用 prettier 对提交的代码进行格式化，如果未通过，会报错。
 
 ### History Code
 
