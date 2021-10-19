@@ -5,7 +5,15 @@ import axios from 'axios'
 
 export const baseInterceptors: interceptorsResponseConfig = {
   fufilled: function (response) {
-    const { data, config, status } = response
+    let { data, config, status } = response
+    // 有些后端接口 data 下返回没有 code、status、data 字段的，通常是成功的，为其构造结构
+    if (data.code === undefined && data.status === undefined && data.data === undefined) {
+      data = response.data = {
+        code: 0,
+        status: 'success',
+        data: data
+      }
+    }
     const code = data.code as number
     // 如果user-adv鉴权未通过
     if(code === 40102){
