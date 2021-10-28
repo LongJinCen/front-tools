@@ -1,3 +1,7 @@
+import { AxiosInstance } from "axios"
+import { forEach } from "lodash-es"
+import { interceptorsRequestConfig, interceptorsResponseConfig } from "./types/interceptors"
+
 /**
  * 判断URL和当前页面的请求是否是相同host
  * @param {string} url 需要判断的url
@@ -129,4 +133,40 @@ export const parseUrl = function (url?: string): URL {
   const query = queryToJson(location.search)
   const aadvidObj = { aadvid: query.aadvid || '' }
   return addOrReplaceParam(href, { ...aadvidObj, ...queryObj })
+}
+
+/**
+ * 添加请求拦截器
+ * @param instanse 
+ * @param intercept 
+ */
+export const addRequestIntercept = function (
+  instance: AxiosInstance,
+  intercept: Record<string, interceptorsRequestConfig>
+) {
+  forEach(intercept, (value, key) => {
+    if (value.reject) {
+      instance.interceptors.request.use(value.fufilled, value.reject);
+    } else {
+      instance.interceptors.request.use(value.fufilled);
+    }
+  })
+}
+
+/**
+ * 添加响应拦截器
+ * @param instanse 
+ * @param intercept 
+ */
+ export const addResponseIntercept = function (
+  instance: AxiosInstance,
+  intercept: Record<string, interceptorsResponseConfig>
+) {
+  forEach(intercept, (value, key) => {
+    if (value.reject) {
+      instance.interceptors.response.use(value.fufilled, value.reject);
+    } else {
+      instance.interceptors.response.use(value.fufilled)
+    }
+  })
 }

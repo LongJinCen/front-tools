@@ -1,31 +1,24 @@
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
 import * as requestInterceptors from './interceptors/request'
 import * as responseInterceptors from './interceptors/response'
-import { forEach } from 'lodash-es'
+import * as responseInterceptorsPlus from '././interceptors/response-plus'
+import { addRequestIntercept, addResponseIntercept } from './tool'
 const CancelToken = axios.CancelToken
 
 const instance = axios.create()
+const instancePlus = axios.create()
 
 // post请求默认设置 Content-Type 为 json
 instance.defaults.headers.post['Content-Type'] = 'application/json';
+instancePlus.defaults.headers.post['Content-Type'] = 'application/json';
 
 // 请求拦截器
-forEach(requestInterceptors, (value, key) => {
-  if (value.reject) {
-    instance.interceptors.request.use(value.fufilled, value.reject);
-  } else {
-    instance.interceptors.request.use(value.fufilled);
-  }
-})
+addRequestIntercept(instance, requestInterceptors)
+addRequestIntercept(instancePlus, requestInterceptors)
 
 // 响应拦截器
-forEach(responseInterceptors, (value ,key) => {
-  if (value.reject) {
-    instance.interceptors.response.use(value.fufilled, value.reject);
-  } else {
-    instance.interceptors.response.use(value.fufilled)
-  }
-})
+addResponseIntercept(instance, responseInterceptors)
+addResponseIntercept(instancePlus, responseInterceptorsPlus)
 
 const cancleMap = new Map<Promise<any>, CancelTokenSource>()
 
@@ -74,7 +67,7 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
     source = CancelToken.source()
     config.cancelToken = source.token
   }
-  let result = instance(config)
+  let result = instancePlus(config)
   if (config.cancleable) {
     cancleMap.set(result, source as CancelTokenSource)
   }
