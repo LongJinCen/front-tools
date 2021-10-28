@@ -56,7 +56,7 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
  * @param config
  * @returns {AxiosResponse<{ data: R }>}
  */
- const requestPlus = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<R> => {
+const requestPlus = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<R> => {
   if (['GET', 'get'].includes(config.method as string)) {
     config.params = value
   } else {
@@ -72,6 +72,21 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
     cancleMap.set(result, source as CancelTokenSource)
   }
   return result
+}
+
+/**
+ * 
+ * @description 调用该方法，直接发起请求，相当于直接调用 axios。
+ *  - 使用场景：需要直接调用 axios 发起请求
+ *  - Vs request、requestPlus：
+ *    - request、requestPlus 适用于 service 统一收敛到某一个目录中，在 service 中定义好请求的 request、response 类型、url、方法。
+ *    - requestEscape 适用于不能统一收敛到 service 目录中的请求。需要单独调用
+ * @param config 
+ * @returns Promise
+ */
+const requestEscape = <T = any, R = any>(config: AxiosRequestConfig & { data: T }): Promise<R> => {
+ let result = instance(config).then(res => res.data.data)
+ return result
 }
 
 /**
@@ -149,6 +164,7 @@ const useDebounce = <
 export {
   request,
   requestPlus,
+  requestEscape,
   abort,
   useCache,
   useDebounce
