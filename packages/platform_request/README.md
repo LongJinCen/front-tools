@@ -52,7 +52,7 @@ export interface AxiosResponse<T = any>  {
   request?: any;
 }
 ```
-`request、requestPlus` 的区别是，前者返回 `AxiosResponse.data.data`，后者返回 `AxiosResponse`
+`request、requestPlus` 的区别是，前者返回 `AxiosResponse.data.data`，后者返回 `AxiosResponse.data`
 ### useCache
 可以用该方法对 `request、requestPlus` 进行包装，使接口具有缓存功能，缓存的策略为，将请求的 `data` 或者 `params` 作为 key，发生改变后重新请求，否则利用缓存。
 

@@ -56,7 +56,7 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
  * @param config
  * @returns {AxiosResponse<{ data: R }>}
  */
- const requestPlus = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<AxiosResponse<{ data: R }>> => {
+ const requestPlus = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => (value: T): Promise<R> => {
   if (['GET', 'get'].includes(config.method as string)) {
     config.params = value
   } else {
@@ -67,7 +67,7 @@ const request = <T = any, R = any>(config: AxiosRequestConfig & ICancleable) => 
     source = CancelToken.source()
     config.cancelToken = source.token
   }
-  let result = instancePlus(config)
+  let result = instancePlus(config).then(res => res.data)
   if (config.cancleable) {
     cancleMap.set(result, source as CancelTokenSource)
   }
