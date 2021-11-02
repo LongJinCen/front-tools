@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "Src/*": ["./src/*"]
+    },
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "declaration": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}

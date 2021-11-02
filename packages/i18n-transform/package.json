@@ -1,0 +1,40 @@
+{
+  "name": "@ad/i18n-transform",
+  "version": "1.0.0",
+  "description": "国际化文案自动替换工具",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@code.byted.org:ad/platform_request.git"
+  },
+  "homepage": "https://code.byted.org/ad/i18n-transform",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "http://bnpm.byted.org"
+  },
+  "author": "longjincen@bytedance.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.176",
+    "@types/webpack": "^5.28.0",
+    "typescript": "^4.3.5",
+    "webpack": "^5.46.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@ies/starling_node": "^1.7.4",
+    "axios": "^0.21.4",
+    "lodash": "^4.17.21"
+  },
+  "peerDependencies": {
+    "axios": "^0.21.4"
+  }
+}
