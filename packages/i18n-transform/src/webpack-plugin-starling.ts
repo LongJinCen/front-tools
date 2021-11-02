@@ -1,11 +1,11 @@
 import type Webpack from "webpack";
 import LangManager from "./lang-manager";
-import Client from "@ies/starling_node";
-import { IOptions } from "./types";
+import { IOptions, Mode } from "./types";
 
 export default class WebpackPluginStarling {
   defaultOptions = {
-    projectName: "",
+    apikey: "",
+    mode: "normal" as Mode,
     namespace: [],
     lang: ["zh", "en", "ja"],
   };
@@ -19,9 +19,12 @@ export default class WebpackPluginStarling {
     }
     this.langManager = new LangManager(
       this.options.namespace,
-      this.options.lang
+      this.options.lang,
+      this.options.apikey,
+      this.options.mode
     );
   }
+
   apply(compiler: Webpack.Compiler) {
     // 拉取 starling 数据，挂载到 compiler 上
     compiler.hooks.beforeRun.tapAsync(
@@ -29,7 +32,7 @@ export default class WebpackPluginStarling {
       async (compiler, callback) => {
         (compiler as any).langManager = this.langManager;
         try {
-          await this.initClient();
+          await this.langManager.loadData();
         } catch (error: any) {
           callback(error);
         }
@@ -56,19 +59,5 @@ export default class WebpackPluginStarling {
         );
       }
     );
-  }
-  /**
-   * @description 根据 namespace 跟 Lang 拉取文案
-   * @param callback
-   */
-  async initClient() {
-    const { projectName, namespace, lang } = this.options;
-    for (const space of namespace) {
-      const client = new Client(projectName, space);
-      for (const locale of lang) {
-        const { data } = (await client.getPackage(locale)) as any;
-        this.langManager.addLangPackage(space, locale, data);
-      }
-    }
   }
 }

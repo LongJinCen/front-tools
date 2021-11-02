@@ -30,7 +30,6 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@ies/starling_node": "^1.7.4",
     "axios": "^0.21.4",
     "lodash": "^4.17.21"
   },
