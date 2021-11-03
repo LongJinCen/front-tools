@@ -1,8 +1,8 @@
 import type Webpack from "webpack";
-import LangManager from "./lang-manager";
-import { IOptions, Mode } from "./types";
+import LangManager from "../lang-manager";
+import { IOptions, Mode } from "../types";
 
-export default class WebpackPluginStarling {
+class WebpackPluginStarling {
   defaultOptions = {
     apikey: "",
     mode: "normal" as Mode,
@@ -61,3 +61,5 @@ export default class WebpackPluginStarling {
     );
   }
 }
+
+export default WebpackPluginStarling;

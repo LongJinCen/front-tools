@@ -2,7 +2,7 @@ import axios from "axios";
 import { forEach, set, get } from "lodash";
 import { IStore, IStoreNoTranslate, IStoreUsed } from "./types";
 
-export default class LangManager {
+class LangManager {
   public store: IStore = {};
   public storeUsed: IStoreUsed = {};
   public storeNoTranslate: IStoreNoTranslate = {};
@@ -117,3 +117,5 @@ export default class LangManager {
     }
   }
 }
+
+export default LangManager;

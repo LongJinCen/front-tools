@@ -34,3 +34,5 @@ export interface IStoreNoTranslate {
     [key: string]: string;
   };
 }
+
+export type TParserCallback = (text: string) => string;
