@@ -1,6 +1,6 @@
 import { LoaderContext } from "webpack";
-import parser from "Src/parser";
-import LangManager from "Src/lang-manager";
+import parser from "../parser";
+import LangManager from "../lang-manager";
 
 function I18nTransformLoader(this: LoaderContext<any>, source: string) {
   if (/node_modules/.test(this.resourcePath)) {

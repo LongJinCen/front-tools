@@ -3,15 +3,15 @@ import { TParserCallback } from "Src/types";
 import babelGenerate from "@babel/generator";
 import traverse from "@babel/traverse";
 import plusTransform from "./plus-transform";
-import { isIncludeChinese, isPlural, getPlural } from "./regular";
-import { normalizeString } from "./tool";
+import { isIncludeChinese, isPlural, getPlural, splitText } from "./regular";
+import { generateReplaceNode } from "./tool";
 import {
   BinaryExpression,
-  callExpression,
-  identifier,
-  stringLiteral,
   arrayExpression,
   numericLiteral,
+  Expression,
+  isTemplateElement,
+  TemplateElement,
 } from "@babel/types";
 
 function I18nParser(
@@ -21,6 +21,7 @@ function I18nParser(
 ) {
   const AST = parse(source, {
     sourceFilename,
+    sourceType: "module",
   });
   traverse(AST, {
     StringLiteral(path) {
@@ -44,22 +45,24 @@ function I18nParser(
         plusTransform(path, callback);
         return;
       }
+      const { before, middle: finalText, after } = splitText(node.value);
       // 处理复数
-      if (isPlural(node.value)) {
-        const { number, info } = getPlural(node.value);
+      if (isPlural(finalText)) {
+        const { number, info } = getPlural(finalText);
         const key = callback(`{0}${info}`);
-        path.replaceWith(
-          callExpression(identifier("$at"), [
-            stringLiteral(key),
-            arrayExpression([numericLiteral(number as number)]),
-          ])
+        const replaceNode = generateReplaceNode(
+          key,
+          before,
+          after,
+          arrayExpression([numericLiteral(number as number)])
         );
+        path.replaceWith(replaceNode);
         return;
       }
       // 处理普通字符串
-      const str = normalizeString(node.value);
-      const key = callback(str);
-      path.replaceWith(callExpression(identifier("$at"), [stringLiteral(key)]));
+      const key = callback(finalText);
+      const replaceNode = generateReplaceNode(key, before, after);
+      path.replaceWith(replaceNode);
     },
     TemplateLiteral(path) {
       const { node, parent, parentPath } = path;
@@ -80,20 +83,48 @@ function I18nParser(
       // `发顺丰${value}` 模板字符串包含属性的处理
       if (node.expressions.length) {
         let beforeTranslate = "";
-        node.quasis.forEach((item, index) => {
-          beforeTranslate = beforeTranslate + item + `{${index}}`;
+        // 将 expressions 跟 quasis 部分合并到一起并进行排序
+        const sortedElement = node.expressions
+          .concat(node.quasis as any)
+          .filter((item) => {
+            if (
+              isTemplateElement(item) &&
+              !(item as TemplateElement).value.raw
+            ) {
+              return false;
+            }
+            return true;
+          })
+          .sort((a, b) => ((a.start || 0) > (b.start || 0) ? 1 : -1));
+        // 生成源文案对应的 key
+        sortedElement.forEach((item, index) => {
+          if (isTemplateElement(item)) {
+            beforeTranslate =
+              beforeTranslate + (item as TemplateElement).value.raw;
+          } else {
+            beforeTranslate = beforeTranslate + `{${index}}`;
+          }
         });
-        const key = callback(beforeTranslate);
-        path.replaceWith(
-          callExpression(identifier("$at"), [
-            stringLiteral(key),
-            node.expressions as any,
-          ])
+        const { before, middle: finalText, after } = splitText(beforeTranslate);
+        const key = callback(finalText);
+        const replaceNode = generateReplaceNode(
+          key,
+          before,
+          after,
+          arrayExpression(node.expressions as Expression[])
         );
+        path.replaceWith(replaceNode);
+        return;
       }
       // `发多少的` 普通模板字符串处理
-      const key = callback(node.quasis[0].value.raw);
-      path.replaceWith(callExpression(identifier("$at"), [stringLiteral(key)]));
+      const {
+        before,
+        middle: finalText,
+        after,
+      } = splitText(node.quasis[0].value.raw);
+      const key = callback(finalText);
+      const replaceNode = generateReplaceNode(key, before, after);
+      path.replaceWith(replaceNode);
     },
   });
   return babelGenerate(AST);

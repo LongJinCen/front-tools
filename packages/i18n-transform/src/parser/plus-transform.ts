@@ -1,13 +1,13 @@
 import { NodePath } from "@babel/traverse";
-import T, {
+import {
   arrayExpression,
   BinaryExpression,
-  callExpression,
-  identifier,
   isStringLiteral,
-  stringLiteral,
+  isBinaryExpression,
 } from "@babel/types";
 import { TParserCallback } from "Src/types";
+import { splitText } from "./regular";
+import { generateReplaceNode } from "./tool";
 
 /**
  * @description 处理字符串相加的情况: '总共' + value + '个西瓜和' + value1[index] + '南瓜' + a || b
@@ -29,7 +29,7 @@ function plusTransform(path: NodePath, callback: TParserCallback): void {
     return;
   }
   // 字符串数组
-  let textArr = [];
+  let textArr: string[] = [];
   // 插值
   const variable = arrayExpression();
   // 遍历 BinaryExpression
@@ -39,22 +39,38 @@ function plusTransform(path: NodePath, callback: TParserCallback): void {
       textArr.unshift(current.right.value);
     } else if (current.right) {
       variable.elements.unshift(current.right);
+      textArr.unshift("{}");
+    }
+    if (!isBinaryExpression(current.left)) {
+      if (isStringLiteral(current.left)) {
+        textArr.unshift(current.left.value);
+      } else if (current.left) {
+        variable.elements.unshift(current.left as any);
+        textArr.unshift("{}");
+      }
     }
     current = current.left as BinaryExpression;
   }
   // 源文案
   let beforeTranslate = "";
   textArr.forEach((item, index) => {
-    beforeTranslate = beforeTranslate + item + `{${index}}`;
+    if (item === "{}") {
+      beforeTranslate += `{${index}}`;
+    } else {
+      beforeTranslate += item;
+    }
   });
+  // 源文案前后可能会存在空格、换行符，需要处理
+  const { before, middle: finalText, after } = splitText(beforeTranslate);
   // 通过源文案得到 key
-  const key = callback(beforeTranslate);
-  const argument =
-    variable.elements.length > 0
-      ? [stringLiteral(key), variable]
-      : [stringLiteral(key)];
+  const key = callback(finalText);
   // $at('key', [xxx])
-  const replaceNode = callExpression(identifier("$at"), argument);
+  const replaceNode = generateReplaceNode(
+    key,
+    before,
+    after,
+    variable.elements.length ? variable : undefined
+  );
   // 将字符串相加替换为 $at('key', [xxx])
   topBinaryExprePath.replaceWith(replaceNode);
 }
