@@ -51,9 +51,27 @@ class WebpackPluginStarling {
             name: "WebpackPluginStarling",
             stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
           },
-          (assets, callback) => {
-            const content = JSON.stringify(this.langManager.storeUsed);
-            compilation.emitAsset("lang.json", new RawSource(content));
+          async (assets, callback) => {
+            const storeUsedTranslated = JSON.stringify(
+              this.langManager.storeUsedTranslated
+            );
+            const storeUsedNoTranslated = JSON.stringify(
+              this.langManager.storeUsedNoTranslated
+            );
+            const storeUsed = JSON.stringify(this.langManager.storeUsed);
+
+            compilation.emitAsset(
+              "lang.json",
+              new RawSource(storeUsedTranslated)
+            );
+            compilation.emitAsset(
+              "file-translate-record-no-translate.json",
+              new RawSource(storeUsedNoTranslated)
+            );
+            compilation.emitAsset(
+              "file-translate-record-all.json",
+              new RawSource(storeUsed)
+            );
             callback();
           }
         );

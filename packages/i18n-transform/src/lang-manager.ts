@@ -1,11 +1,12 @@
 import axios from "axios";
 import { forEach, set, get } from "lodash";
-import { IStore, IStoreNoTranslate, IStoreUsed } from "./types";
+import { IStore, IStoreRecord, IStoreUsed } from "./types";
 
 class LangManager {
   public store: IStore = {};
-  public storeUsed: IStoreUsed = {};
-  public storeNoTranslate: IStoreNoTranslate = {};
+  public storeUsedTranslated: IStoreUsed = {};
+  public storeUsedNoTranslated: IStoreRecord = {};
+  public storeUsed: IStoreRecord = {};
 
   constructor(
     public namespace: string[],
@@ -16,11 +17,11 @@ class LangManager {
     // 初始化 store
     lang.forEach((locale) => {
       this.store[locale] = {};
-      this.storeUsed[locale] = {};
+      this.storeUsedTranslated[locale] = {};
       namespace.forEach((space) => {
         // 使用 map 降低时间复杂度
         this.store[locale][space] = [new Map(), new Map()];
-        this.storeUsed[locale][space] = {};
+        this.storeUsedTranslated[locale][space] = {};
       });
     });
   }
@@ -50,35 +51,43 @@ class LangManager {
    */
   getKeyByText(text: string, filePath: string) {
     let keyPath = "";
+    let key = "";
     // 从中文下的命名空间中查找即可
     forEach(this.store.zh, (value, namespace) => {
       const current = value[1].get(text);
       if (current) {
+        key = current;
         keyPath = `${namespace}.${current}`;
         return false;
       }
     });
     // 没有则生成一个 key, 将未翻译的文案存储起来, 默认存储到 namespace[0] 中
     if (!keyPath) {
-      const newKey = `${Date.now().toString().slice(-6)}`;
+      const newKey = (key = `${Date.now().toString().slice(-6)}`);
       keyPath = `${this.namespace[0]}.${newKey}`;
-      (this.storeNoTranslate[filePath] ||
-        (this.storeNoTranslate[filePath] = {}))[newKey] = text;
+      // 记录未翻译的文案跟对应的 key。方便后续机翻和输出未翻译的记录
+      (this.storeUsedNoTranslated[filePath] ||
+        (this.storeUsedNoTranslated[filePath] = {}))[newKey] = text;
       // 每次访问 getKeyByText 传入的文案表示当前需要使用
     } else {
       this.copyStore2UsedStore(keyPath);
     }
+    // 记录每个文件的翻译文案跟对应的 key
+    (this.storeUsed[filePath] || (this.storeUsed[filePath] = {}))[key] = text;
     return keyPath;
   }
 
   /**
-   * 将使用到的文案 copy 到 storeUsed 当中
+   * 将使用到的文案 copy 到 storeUsedTranslated 当中
    * @param keyPath
    */
   copyStore2UsedStore(keyPath: string) {
     forEach(this.store, (value, lang) => {
-      const translated = get(value, keyPath);
-      set(this.storeUsed, `${lang}.${keyPath}`, translated);
+      const keyArr = keyPath.split(".");
+      const prePath = keyArr.slice(0, keyArr.length - 1).join(".");
+      const finalKey = keyArr.slice(keyArr.length - 1, keyArr.length).join("");
+      const translated = get(value, prePath)[0].get(finalKey);
+      set(this.storeUsedTranslated, `${lang}.${keyPath}`, translated);
     });
   }
 

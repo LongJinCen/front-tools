@@ -73,6 +73,7 @@ function plusTransform(path: NodePath, callback: TParserCallback): void {
   );
   // 将字符串相加替换为 $at('key', [xxx])
   topBinaryExprePath.replaceWith(replaceNode);
+  topBinaryExprePath.skip();
 }
 
 export default plusTransform;

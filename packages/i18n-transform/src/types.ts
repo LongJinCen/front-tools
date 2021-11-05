@@ -27,7 +27,7 @@ export interface IStoreUsed {
   };
 }
 
-export interface IStoreNoTranslate {
+export interface IStoreRecord {
   // 文件名
   [key: string]: {
     // 翻译文案对应的 key

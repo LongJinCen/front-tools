@@ -57,12 +57,14 @@ function I18nParser(
           arrayExpression([numericLiteral(number as number)])
         );
         path.replaceWith(replaceNode);
+        path.skip();
         return;
       }
       // 处理普通字符串
       const key = callback(finalText);
       const replaceNode = generateReplaceNode(key, before, after);
       path.replaceWith(replaceNode);
+      path.skip();
     },
     TemplateLiteral(path) {
       const { node, parent, parentPath } = path;
@@ -114,6 +116,7 @@ function I18nParser(
           arrayExpression(node.expressions as Expression[])
         );
         path.replaceWith(replaceNode);
+        path.skip();
         return;
       }
       // `发多少的` 普通模板字符串处理
@@ -125,6 +128,7 @@ function I18nParser(
       const key = callback(finalText);
       const replaceNode = generateReplaceNode(key, before, after);
       path.replaceWith(replaceNode);
+      path.skip();
     },
   });
   return babelGenerate(AST);
