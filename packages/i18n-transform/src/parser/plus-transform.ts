@@ -16,24 +16,16 @@ import { generateReplaceNode } from "./tool";
  * @param path
  * @returns
  */
-function plusTransform(path: NodePath, callback: TParserCallback): void {
-  // 查找树中最顶层的 BinaryExpression 节点
-  const topBinaryExprePath = path.findParent((path) => {
-    const { parentPath } = path;
-    if (!parentPath) {
-      return false;
-    }
-    return !parentPath.isBinaryExpression();
-  });
-  if (!topBinaryExprePath) {
-    return;
-  }
+function plusTransform(
+  path: NodePath<BinaryExpression>,
+  callback: TParserCallback
+): void {
   // 字符串数组
   let textArr: string[] = [];
   // 插值
   const variable = arrayExpression();
   // 遍历 BinaryExpression
-  let current = topBinaryExprePath.node as BinaryExpression;
+  let current = path.node;
   while (current) {
     if (isStringLiteral(current.right)) {
       textArr.unshift(current.right.value);
@@ -53,9 +45,10 @@ function plusTransform(path: NodePath, callback: TParserCallback): void {
   }
   // 源文案
   let beforeTranslate = "";
-  textArr.forEach((item, index) => {
+  let index = 0;
+  textArr.forEach((item) => {
     if (item === "{}") {
-      beforeTranslate += `{${index}}`;
+      beforeTranslate += `{${index++}}`;
     } else {
       beforeTranslate += item;
     }
@@ -72,8 +65,7 @@ function plusTransform(path: NodePath, callback: TParserCallback): void {
     variable.elements.length ? variable : undefined
   );
   // 将字符串相加替换为 $at('key', [xxx])
-  topBinaryExprePath.replaceWith(replaceNode);
-  topBinaryExprePath.skip();
+  path.replaceWith(replaceNode);
 }
 
 export default plusTransform;

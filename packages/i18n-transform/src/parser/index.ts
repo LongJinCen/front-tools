@@ -4,7 +4,7 @@ import babelGenerate from "@babel/generator";
 import traverse from "@babel/traverse";
 import plusTransform from "./plus-transform";
 import { isIncludeChinese, isPlural, getPlural, splitText } from "./regular";
-import { generateReplaceNode } from "./tool";
+import { generateReplaceNode, judgeBinaryExpreIncludeChinese } from "./tool";
 import {
   BinaryExpression,
   arrayExpression,
@@ -35,14 +35,6 @@ function I18nParser(
         parentPath.isBinaryExpression() &&
         ["==", "==="].includes((parent as BinaryExpression).operator)
       ) {
-        return;
-      }
-      // 处理相加运算符
-      if (
-        parentPath.isBinaryExpression() &&
-        (parent as BinaryExpression).operator === "+"
-      ) {
-        plusTransform(path, callback);
         return;
       }
       const { before, middle: finalText, after } = splitText(node.value);
@@ -116,7 +108,6 @@ function I18nParser(
           arrayExpression(node.expressions as Expression[])
         );
         path.replaceWith(replaceNode);
-        path.skip();
         return;
       }
       // `发多少的` 普通模板字符串处理
@@ -129,6 +120,15 @@ function I18nParser(
       const replaceNode = generateReplaceNode(key, before, after);
       path.replaceWith(replaceNode);
       path.skip();
+    },
+    BinaryExpression(path) {
+      if (path.node.operator !== "+") {
+        return;
+      }
+      if (!judgeBinaryExpreIncludeChinese(path.node)) {
+        return;
+      }
+      plusTransform(path, callback);
     },
   });
   return babelGenerate(AST);

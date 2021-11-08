@@ -3,8 +3,13 @@ import {
   identifier,
   stringLiteral,
   binaryExpression,
+  BinaryExpression,
+  isBinaryExpression,
   ArrayExpression,
+  Node,
+  isStringLiteral,
 } from "@babel/types";
+import { isIncludeChinese } from "./regular";
 
 /**
  * @description 去掉字符串两边的空格和换行符
@@ -45,4 +50,28 @@ export const generateReplaceNode = (
     replaceNode = binaryExpression("+", replaceNode, stringLiteral(after));
   }
   return replaceNode;
+};
+
+/**
+ * 判断相加运算中是否包含中文
+ * @param node
+ */
+export const judgeBinaryExpreIncludeChinese = (
+  node: BinaryExpression
+): boolean => {
+  let result = false;
+  function traverse(node: Node | undefined | null) {
+    if (!node) {
+      return;
+    }
+    if (isBinaryExpression(node)) {
+      traverse(node.left);
+      traverse(node.right);
+    }
+    if (isStringLiteral(node) && isIncludeChinese(node.value)) {
+      result = true;
+    }
+  }
+  traverse(node);
+  return result;
 };
