@@ -19,6 +19,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
     mode,
     funcName = "$at",
     langFileName,
+    langGlobalFuncName,
     withOutTransFileName,
   } = normalizedOptions;
   const langManager = new LangManager(namespace, lang, apikey, mode);
@@ -45,7 +46,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
       this.emitFile({
         type: "asset",
         fileName: `assets/${langFileName}`,
-        source: `var global_lang_package = ${storeUsedTranslated}`,
+        source: `var ${langGlobalFuncName} = ${storeUsedTranslated}`,
       });
       // 所有的替换记录，包括已翻译跟未翻译的
       this.emitFile({
@@ -54,11 +55,19 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
         source: storeUsed,
       });
       // 生成未翻译的 excel，可用于上传 starling
-      const excelData: Array<[string, string]> = [];
-      forEach(langManager.storeUsedNoTranslated, (fileRecord) => {
-        forEach(fileRecord, (value, key) => {
-          excelData.push([key, value]);
-        });
+      const excelData: Array<string[]> = [];
+      excelData.push([
+        "keys",
+        "source",
+        "length limit",
+        "context",
+        "en",
+        "ja",
+        "zh",
+      ]);
+      const noDuplicate = langManager.getNoTranslateWithOutDuplicate();
+      forEach(noDuplicate, (value, key) => {
+        excelData.push([key, value]);
       });
       const arrayBuffer = xslx.build([
         {

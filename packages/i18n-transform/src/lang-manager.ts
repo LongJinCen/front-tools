@@ -126,6 +126,24 @@ class LangManager {
       }
     }
   }
+
+  /**
+   * storeUsedNoTranslated 中会存在重复的中文文案，做去重处理
+   */
+  getNoTranslateWithOutDuplicate() {
+    const record = new Map();
+    const result: Record<string, string> = {};
+    forEach(this.storeUsedNoTranslated, (value) => {
+      forEach(value, (text, key) => {
+        if (record.get(text)) {
+          return;
+        }
+        result[key] = text;
+        record.set(text, key);
+      });
+    });
+    return result;
+  }
 }
 
 export default LangManager;

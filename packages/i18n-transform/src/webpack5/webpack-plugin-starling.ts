@@ -61,7 +61,9 @@ class WebpackPluginStarling {
             // 生成语言包
             compilation.emitAsset(
               this.options.langFileName,
-              new RawSource(`var global_lang_package = ${storeUsedTranslated}`)
+              new RawSource(
+                `var ${this.options.langGlobalFuncName} = ${storeUsedTranslated}`
+              )
             );
             // 所有的替换记录，包括已翻译跟未翻译的
             compilation.emitAsset(
@@ -69,11 +71,20 @@ class WebpackPluginStarling {
               new RawSource(storeUsed)
             );
             // 生成未翻译的 excel，可用于上传 starling
-            const excelData: Array<[string, string]> = [];
-            forEach(this.langManager.storeUsedNoTranslated, (fileRecord) => {
-              forEach(fileRecord, (value, key) => {
-                excelData.push([key, value]);
-              });
+            const excelData: Array<string[]> = [];
+            excelData.push([
+              "keys",
+              "source",
+              "length limit",
+              "context",
+              "en",
+              "ja",
+              "zh",
+            ]);
+            const noDuplicate =
+              this.langManager.getNoTranslateWithOutDuplicate();
+            forEach(noDuplicate, (value, key) => {
+              excelData.push([key, value]);
             });
             const arrayBuffer = xslx.build([
               {

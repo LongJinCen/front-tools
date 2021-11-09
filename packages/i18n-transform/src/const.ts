@@ -6,5 +6,6 @@ export const defaultOptions = {
   mode: "normal" as Mode,
   lang: ["zh", "en", "ja"],
   langFileName: "lang.js",
+  langGlobalFuncName: "global_lang_package",
   withOutTransFileName: "not-translate",
 };

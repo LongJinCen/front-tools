@@ -10,6 +10,7 @@ export interface IWebpackOptionsInternal {
   mode: Mode;
   lang: string[];
   langFileName: string;
+  langGlobalFuncName: string;
   withOutTransFileName: string;
 }
 
@@ -20,6 +21,7 @@ export interface IWebpackOptionsOut {
   mode?: Mode;
   lang?: string[];
   langFileName?: string;
+  langGlobalFuncName?: string;
   withOutTransFileName?: string;
 }
 
