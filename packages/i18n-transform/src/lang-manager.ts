@@ -63,7 +63,8 @@ class LangManager {
     });
     // 没有则生成一个 key, 将未翻译的文案存储起来, 默认存储到 namespace[0] 中
     if (!keyPath) {
-      const newKey = (key = `${Date.now().toString().slice(-6)}`);
+      const random = Math.random().toString().slice(-5);
+      const newKey = (key = `${random}_${Date.now().toString().slice(-6)}`);
       keyPath = `${this.namespace[0]}.${newKey}`;
       // 记录未翻译的文案跟对应的 key。方便后续机翻和输出未翻译的记录
       (this.storeUsedNoTranslated[filePath] ||

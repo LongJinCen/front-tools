@@ -29,16 +29,17 @@ export const generateReplaceNode = (
   key: string,
   before: string,
   after: string,
+  funcName: string,
   extraParams?: ArrayExpression
 ) => {
   let callFunc;
   if (extraParams) {
-    callFunc = callExpression(identifier("$at"), [
+    callFunc = callExpression(identifier(funcName), [
       stringLiteral(key),
       extraParams,
     ]);
   } else {
-    callFunc = callExpression(identifier("$at"), [stringLiteral(key)]);
+    callFunc = callExpression(identifier(funcName), [stringLiteral(key)]);
   }
   let replaceNode;
   if (before) {

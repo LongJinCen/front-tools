@@ -17,6 +17,7 @@ import {
 function I18nParser(
   source: string,
   sourceFilename: string,
+  funcName: string,
   callback: TParserCallback
 ) {
   const AST = parse(source, {
@@ -46,6 +47,7 @@ function I18nParser(
           key,
           before,
           after,
+          funcName,
           arrayExpression([numericLiteral(number as number)])
         );
         path.replaceWith(replaceNode);
@@ -54,7 +56,13 @@ function I18nParser(
       }
       // 处理普通字符串
       const key = callback(finalText);
-      const replaceNode = generateReplaceNode(key, before, after);
+      const replaceNode = generateReplaceNode(
+        key,
+        before,
+        after,
+        funcName,
+        undefined
+      );
       path.replaceWith(replaceNode);
       path.skip();
     },
@@ -62,7 +70,7 @@ function I18nParser(
       const { node, parent, parentPath } = path;
       // 不包含中文不处理
       const hasChinese = node.quasis.some((item) =>
-        isIncludeChinese(item.value.raw)
+        isIncludeChinese(item.value.cooked || item.value.raw)
       );
       if (!hasChinese) {
         return;
@@ -91,12 +99,13 @@ function I18nParser(
           })
           .sort((a, b) => ((a.start || 0) > (b.start || 0) ? 1 : -1));
         // 生成源文案对应的 key
-        sortedElement.forEach((item, index) => {
+        let index = 0;
+        sortedElement.forEach((item) => {
           if (isTemplateElement(item)) {
             beforeTranslate =
-              beforeTranslate + (item as TemplateElement).value.raw;
+              beforeTranslate + (item as TemplateElement).value.cooked;
           } else {
-            beforeTranslate = beforeTranslate + `{${index}}`;
+            beforeTranslate = beforeTranslate + `{${index++}}`;
           }
         });
         const { before, middle: finalText, after } = splitText(beforeTranslate);
@@ -105,6 +114,7 @@ function I18nParser(
           key,
           before,
           after,
+          funcName,
           arrayExpression(node.expressions as Expression[])
         );
         path.replaceWith(replaceNode);
@@ -115,9 +125,15 @@ function I18nParser(
         before,
         middle: finalText,
         after,
-      } = splitText(node.quasis[0].value.raw);
+      } = splitText(node.quasis[0].value.cooked || node.quasis[0].value.raw);
       const key = callback(finalText);
-      const replaceNode = generateReplaceNode(key, before, after);
+      const replaceNode = generateReplaceNode(
+        key,
+        before,
+        after,
+        funcName,
+        undefined
+      );
       path.replaceWith(replaceNode);
       path.skip();
     },
@@ -128,7 +144,7 @@ function I18nParser(
       if (!judgeBinaryExpreIncludeChinese(path.node)) {
         return;
       }
-      plusTransform(path, callback);
+      plusTransform(path, callback, funcName);
     },
   });
   return babelGenerate(AST);

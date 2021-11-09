@@ -3,12 +3,32 @@ export type Mode =
   | "test" // 拉取测试环境
   | "gray"; // 拉取灰度环境
 
-export interface IOptions {
+export interface IWebpackOptionsInternal {
   // starling项目唯一apikey
   apikey: string;
-  mode: Mode;
   namespace: string[];
+  mode: Mode;
   lang: string[];
+  langFileName: string;
+  withOutTransFileName: string;
+}
+
+export interface IWebpackOptionsOut {
+  // starling项目唯一apikey
+  apikey: string;
+  namespace: string[];
+  mode?: Mode;
+  lang?: string[];
+  langFileName?: string;
+  withOutTransFileName?: string;
+}
+
+export interface IViteOptionsInternal extends IWebpackOptionsInternal {
+  funcName: string;
+}
+
+export interface IViteOptionsOut extends IWebpackOptionsOut {
+  funcName?: string;
 }
 
 export interface IStore {

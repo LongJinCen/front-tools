@@ -18,7 +18,8 @@ import { generateReplaceNode } from "./tool";
  */
 function plusTransform(
   path: NodePath<BinaryExpression>,
-  callback: TParserCallback
+  callback: TParserCallback,
+  funcName: string
 ): void {
   // 字符串数组
   let textArr: string[] = [];
@@ -62,6 +63,7 @@ function plusTransform(
     key,
     before,
     after,
+    funcName,
     variable.elements.length ? variable : undefined
   );
   // 将字符串相加替换为 $at('key', [xxx])

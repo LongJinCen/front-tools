@@ -1,18 +1,17 @@
+import { forEach } from "lodash";
 import type Webpack from "webpack";
+import xslx from "node-xlsx";
+import { Buffer } from "buffer";
 import LangManager from "../lang-manager";
-import { IOptions, Mode } from "../types";
+import { IWebpackOptionsInternal, IWebpackOptionsOut } from "../types";
+import { defaultOptions } from "../const";
 
 class WebpackPluginStarling {
-  defaultOptions = {
-    apikey: "",
-    mode: "normal" as Mode,
-    namespace: [],
-    lang: ["zh", "en", "ja"],
-  };
-  options: IOptions;
+  defaultOptions = defaultOptions;
+  options: IWebpackOptionsInternal;
   langManager!: LangManager;
 
-  constructor(options = {}) {
+  constructor(options: IWebpackOptionsOut) {
     this.options = Object.assign(this.defaultOptions, options);
     if (!this.options.lang.includes("zh")) {
       this.options.lang.push("zh");
@@ -59,18 +58,37 @@ class WebpackPluginStarling {
               this.langManager.storeUsedNoTranslated
             );
             const storeUsed = JSON.stringify(this.langManager.storeUsed);
-
+            // 生成语言包
             compilation.emitAsset(
-              "lang.json",
-              new RawSource(storeUsedTranslated)
+              this.options.langFileName,
+              new RawSource(`var global_lang_package = ${storeUsedTranslated}`)
             );
+            // 所有的替换记录，包括已翻译跟未翻译的
             compilation.emitAsset(
-              "file-translate-record-no-translate.json",
-              new RawSource(storeUsedNoTranslated)
-            );
-            compilation.emitAsset(
-              "file-translate-record-all.json",
+              "replace-record.json",
               new RawSource(storeUsed)
+            );
+            // 生成未翻译的 excel，可用于上传 starling
+            const excelData: Array<[string, string]> = [];
+            forEach(this.langManager.storeUsedNoTranslated, (fileRecord) => {
+              forEach(fileRecord, (value, key) => {
+                excelData.push([key, value]);
+              });
+            });
+            const arrayBuffer = xslx.build([
+              {
+                name: this.options.withOutTransFileName,
+                data: excelData,
+              },
+            ]);
+            compilation.emitAsset(
+              `${this.options.withOutTransFileName}.xlsx`,
+              new RawSource(Buffer.from(arrayBuffer))
+            );
+            // 生成未翻译的文案，按文件维度划分，方便开发人员查看
+            compilation.emitAsset(
+              `${this.options.withOutTransFileName}.json`,
+              new RawSource(storeUsedNoTranslated)
             );
             callback();
           }

@@ -23,7 +23,7 @@ export const isPlural = (text: string) => {
   if (!/^\d+/.test(text)) {
     return false;
   }
-  const textWithOutNumber = text.match(/^\d+(\w\W+)/);
+  const textWithOutNumber = text.match(/^\d+([\u4e00-\u9fa5]+)/);
   if (!textWithOutNumber) {
     return false;
   }
@@ -39,7 +39,7 @@ export const isPlural = (text: string) => {
  * @returns
  */
 export const getPlural = (text: string) => {
-  const matched = text.match(/^(\d+)(\w\W+)/);
+  const matched = text.match(/^(\d+)([\u4e00-\u9fa5]+)/);
   return {
     number: matched && +matched[1],
     info: matched && matched[2],
