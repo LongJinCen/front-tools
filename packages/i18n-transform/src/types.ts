@@ -12,6 +12,7 @@ export interface IWebpackOptionsInternal {
   langFileName: string;
   langGlobalFuncName: string;
   withOutTransFileName: string;
+  verbose: boolean;
 }
 
 export interface IWebpackOptionsOut {
@@ -23,6 +24,7 @@ export interface IWebpackOptionsOut {
   langFileName?: string;
   langGlobalFuncName?: string;
   withOutTransFileName?: string;
+  verbose?: boolean;
 }
 
 export interface IViteOptionsInternal extends IWebpackOptionsInternal {
@@ -49,6 +51,11 @@ export interface IStoreUsed {
   };
 }
 
+export interface IStoreRecordEqual {
+  // 文件名
+  [key: string]: Array<{ line: number; column: number }>;
+}
+
 export interface IStoreRecord {
   // 文件名
   [key: string]: {
@@ -57,7 +64,9 @@ export interface IStoreRecord {
   };
 }
 
-export type TParserCallback = (text: string) => string;
+export type TParserTranslateCb = (text: string) => string;
+
+export type TParserEqualCb = (line: number, cloumn: number) => void;
 
 export interface ITranslateResult {
   source: string;

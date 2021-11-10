@@ -12,8 +12,16 @@ function I18nTransformLoader(this: LoaderContext<any>, source: string) {
   }
   const langManager: LangManager = (this._compiler as any).langManager;
   const filename = this.resourcePath;
-  const transformedSurce = parser(source, filename, funcName, (text) =>
-    langManager.getKeyByText(text, filename)
+  const translateCb = (text: string) =>
+    langManager.getKeyByText(text, filename);
+  const equalRecordCb = (line: number, cloumn: number) =>
+    langManager.recordRequal(filename, line, cloumn);
+  const transformedSurce = parser(
+    source,
+    filename,
+    funcName,
+    translateCb,
+    equalRecordCb
   );
   return transformedSurce.code;
 }

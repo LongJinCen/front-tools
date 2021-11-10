@@ -51,26 +51,31 @@ class WebpackPluginStarling {
             stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
           },
           async (assets, callback) => {
+            // 对未翻译的文案进行翻译
             await this.langManager.handleNoTranslate();
+
+            // 生成语言包
             const storeUsedTranslated = JSON.stringify(
               this.langManager.storeUsedTranslated
             );
-            const storeUsedNoTranslated = JSON.stringify(
-              this.langManager.storeUsedNoTranslated
-            );
-            const storeUsed = JSON.stringify(this.langManager.storeUsed);
-            // 生成语言包
             compilation.emitAsset(
               this.options.langFileName,
               new RawSource(
                 `var ${this.options.langGlobalFuncName} = ${storeUsedTranslated}`
               )
             );
+            if (!this.options.verbose) {
+              callback();
+              return;
+            }
+
             // 所有的替换记录，包括已翻译跟未翻译的
+            const storeUsed = JSON.stringify(this.langManager.storeUsed);
             compilation.emitAsset(
               "replace-record.json",
               new RawSource(storeUsed)
             );
+
             // 生成未翻译的 excel，可用于上传 starling
             const excelData: Array<string[]> = [];
             excelData.push([
@@ -97,10 +102,23 @@ class WebpackPluginStarling {
               `${this.options.withOutTransFileName}.xlsx`,
               new RawSource(Buffer.from(arrayBuffer))
             );
+
             // 生成未翻译的文案，按文件维度划分，方便开发人员查看
+            const storeUsedNoTranslated = JSON.stringify(
+              this.langManager.storeUsedNoTranslated
+            );
             compilation.emitAsset(
               `${this.options.withOutTransFileName}.json`,
               new RawSource(storeUsedNoTranslated)
+            );
+
+            // 生成包含比较运算的记录文件
+            const storeEqualRecord = JSON.stringify(
+              this.langManager.storeEqualRecord
+            );
+            compilation.emitAsset(
+              `equal-record.json`,
+              new RawSource(storeEqualRecord)
             );
             callback();
           }

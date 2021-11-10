@@ -21,39 +21,40 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
     langFileName,
     langGlobalFuncName,
     withOutTransFileName,
+    verbose,
   } = normalizedOptions;
   const langManager = new LangManager(namespace, lang, apikey, mode);
   return {
     name: "i18n-transform",
     async buildStart() {
-      return new Promise<void>((resolve, reject) => {
-        langManager
-          .loadData()
-          .then(() => resolve())
-          .catch((error) => reject(error));
-      });
+      await langManager.loadData();
     },
-    buildEnd(error) {
-      // 语言包生成
+    async buildEnd(error) {
+      // 翻译未翻译的语言
+      await langManager.handleNoTranslate();
+
+      // 生成语言包
       const storeUsedTranslated = JSON.stringify(
         langManager.storeUsedTranslated
       );
-      const storeUsedNoTranslated = JSON.stringify(
-        langManager.storeUsedNoTranslated
-      );
-      const storeUsed = JSON.stringify(langManager.storeUsed);
-      // 生成语言包
       this.emitFile({
         type: "asset",
         fileName: `assets/${langFileName}`,
         source: `var ${langGlobalFuncName} = ${storeUsedTranslated}`,
       });
+
+      if (!verbose) {
+        return;
+      }
+
       // 所有的替换记录，包括已翻译跟未翻译的
+      const storeUsed = JSON.stringify(langManager.storeUsed);
       this.emitFile({
         type: "asset",
         fileName: `replace-record.json`,
         source: storeUsed,
       });
+
       // 生成未翻译的 excel，可用于上传 starling
       const excelData: Array<string[]> = [];
       excelData.push([
@@ -81,11 +82,23 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
         fileName: `${withOutTransFileName}.xlsx`,
         source: uint8Array,
       });
+
       // 生成未翻译的文案，按文件维度划分，方便开发人员查看
+      const storeUsedNoTranslated = JSON.stringify(
+        langManager.storeUsedNoTranslated
+      );
       this.emitFile({
         type: "asset",
         fileName: `${withOutTransFileName}.json`,
         source: storeUsedNoTranslated,
+      });
+
+      // 生成包含比较运算的记录文件
+      const storeEqualRecord = JSON.stringify(langManager.storeEqualRecord);
+      this.emitFile({
+        type: "asset",
+        fileName: `equal-record.json`,
+        source: storeEqualRecord,
       });
     },
     transform(code: string, id: string) {
@@ -95,12 +108,17 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
       if (!/\.(js|ts|vue)$/.test(id)) {
         return code;
       }
-      if (/\/tools\/machine-audit\.ts/.test(id)) {
-        console.log("enter");
-      }
       // 通过 babel 进行转换
-      const callback = (text: string) => langManager.getKeyByText(text, id);
-      const transformedSurce = parser(code, id, funcName, callback);
+      const translateCb = (text: string) => langManager.getKeyByText(text, id);
+      const equalRecordCb = (line: number, cloumn: number) =>
+        langManager.recordRequal(id, line, cloumn);
+      const transformedSurce = parser(
+        code,
+        id,
+        funcName,
+        translateCb,
+        equalRecordCb
+      );
       return transformedSurce.code;
     },
   };

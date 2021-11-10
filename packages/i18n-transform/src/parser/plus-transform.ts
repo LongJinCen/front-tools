@@ -5,7 +5,7 @@ import {
   isStringLiteral,
   isBinaryExpression,
 } from "@babel/types";
-import { TParserCallback } from "Src/types";
+import { TParserTranslateCb } from "Src/types";
 import { splitText } from "./regular";
 import { generateReplaceNode } from "./tool";
 
@@ -18,7 +18,7 @@ import { generateReplaceNode } from "./tool";
  */
 function plusTransform(
   path: NodePath<BinaryExpression>,
-  callback: TParserCallback,
+  callback: TParserTranslateCb,
   funcName: string
 ): void {
   // 字符串数组

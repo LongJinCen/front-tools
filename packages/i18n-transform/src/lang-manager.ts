@@ -1,13 +1,24 @@
 import axios from "axios";
 import { forEach, set, get } from "lodash";
-import { IStore, IStoreRecord, IStoreUsed, ITranslateResult } from "./types";
+import {
+  IStore,
+  IStoreRecord,
+  IStoreRecordEqual,
+  IStoreUsed,
+  ITranslateResult,
+} from "./types";
 
 class LangManager {
   // store 用于查找，存储初始化接口返回的原始数据
   public store: IStore = {};
+  // 记录已翻译的文案
   public storeUsedTranslated: IStoreUsed = {};
+  // 记录未翻译的文案
   public storeUsedNoTranslated: IStoreRecord = {};
+  // 所有的替换记录，按文件维度换分，包含已翻译和未翻译的
   public storeUsed: IStoreRecord = {};
+  // 记录包含中文等运算的位置
+  public storeEqualRecord: IStoreRecordEqual = {};
 
   constructor(
     public namespace: string[],
@@ -42,6 +53,22 @@ class LangManager {
     forEach(source, (value, key) => {
       langMaps[0].set(key, value);
       langMaps[1].set(value, key);
+    });
+  }
+
+  /**
+   * 记录文件中包含比较运算的代码位置
+   * @param filePath
+   * @param line
+   * @param cloumn
+   */
+  recordRequal(filePath: string, line: number, cloumn: number) {
+    if (!this.storeEqualRecord[filePath]) {
+      this.storeEqualRecord[filePath] = [];
+    }
+    this.storeEqualRecord[filePath].push({
+      line: line,
+      column: cloumn,
     });
   }
 

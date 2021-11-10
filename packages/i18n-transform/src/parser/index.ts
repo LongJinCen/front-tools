@@ -1,5 +1,5 @@
 import { parse } from "@babel/parser";
-import { TParserCallback } from "Src/types";
+import { TParserEqualCb, TParserTranslateCb } from "Src/types";
 import babelGenerate from "@babel/generator";
 import traverse from "@babel/traverse";
 import plusTransform from "./plus-transform";
@@ -18,7 +18,8 @@ function I18nParser(
   source: string,
   sourceFilename: string,
   funcName: string,
-  callback: TParserCallback
+  translate: TParserTranslateCb,
+  equalRecord: TParserEqualCb
 ) {
   const AST = parse(source, {
     sourceFilename,
@@ -36,13 +37,17 @@ function I18nParser(
         parentPath.isBinaryExpression() &&
         ["==", "==="].includes((parent as BinaryExpression).operator)
       ) {
+        const { loc } = path.node;
+        if (loc?.start) {
+          equalRecord(loc.start.line, loc.start.column);
+        }
         return;
       }
       const { before, middle: finalText, after } = splitText(node.value);
       // 处理复数
       if (isPlural(finalText)) {
         const { number, info } = getPlural(finalText);
-        const key = callback(`{0}${info}`);
+        const key = translate(`{0}${info}`);
         const replaceNode = generateReplaceNode(
           key,
           before,
@@ -55,7 +60,7 @@ function I18nParser(
         return;
       }
       // 处理普通字符串
-      const key = callback(finalText);
+      const key = translate(finalText);
       const replaceNode = generateReplaceNode(
         key,
         before,
@@ -80,6 +85,10 @@ function I18nParser(
         parentPath.isBinaryExpression() &&
         ["==", "==="].includes((parent as BinaryExpression).operator)
       ) {
+        const { loc } = path.node;
+        if (loc?.start) {
+          equalRecord(loc.start.line, loc.start.column);
+        }
         return;
       }
       // `发顺丰${value}` 模板字符串包含属性的处理
@@ -109,7 +118,7 @@ function I18nParser(
           }
         });
         const { before, middle: finalText, after } = splitText(beforeTranslate);
-        const key = callback(finalText);
+        const key = translate(finalText);
         const replaceNode = generateReplaceNode(
           key,
           before,
@@ -126,7 +135,7 @@ function I18nParser(
         middle: finalText,
         after,
       } = splitText(node.quasis[0].value.cooked || node.quasis[0].value.raw);
-      const key = callback(finalText);
+      const key = translate(finalText);
       const replaceNode = generateReplaceNode(
         key,
         before,
@@ -144,7 +153,18 @@ function I18nParser(
       if (!judgeBinaryExpreIncludeChinese(path.node)) {
         return;
       }
-      plusTransform(path, callback, funcName);
+      // 比较运算不处理
+      if (
+        path.parentPath.isBinaryExpression() &&
+        ["==", "==="].includes((path.parent as BinaryExpression).operator)
+      ) {
+        const { loc } = path.node;
+        if (loc?.start) {
+          equalRecord(loc.start.line, loc.start.column);
+        }
+        return;
+      }
+      plusTransform(path, translate, funcName);
     },
   });
   return babelGenerate(AST);

@@ -8,4 +8,5 @@ export const defaultOptions = {
   langFileName: "lang.js",
   langGlobalFuncName: "global_lang_package",
   withOutTransFileName: "not-translate",
+  verbose: false,
 };
