@@ -1,8 +1,9 @@
 import axios from "axios";
 import { forEach, set, get } from "lodash";
-import { IStore, IStoreRecord, IStoreUsed } from "./types";
+import { IStore, IStoreRecord, IStoreUsed, ITranslateResult } from "./types";
 
 class LangManager {
+  // store 用于查找，存储初始化接口返回的原始数据
   public store: IStore = {};
   public storeUsedTranslated: IStoreUsed = {};
   public storeUsedNoTranslated: IStoreRecord = {};
@@ -143,6 +144,36 @@ class LangManager {
       });
     });
     return result;
+  }
+
+  /**
+   * 将 storeUsedNoTranslated 未翻译的文案进行翻译 存储到 storeUsedTranslated 中
+   */
+  async handleNoTranslate() {
+    const record = new Map<string, string>();
+    const textList: string[] = [];
+    forEach(this.storeUsedNoTranslated, (value) => {
+      forEach(value, (text, key) => {
+        record.set(text, key);
+        textList.push(text);
+      });
+    });
+    const translateLang = this.lang.slice(1);
+    for (let i = 0; i < translateLang.length; i++) {
+      const { data } = await axios({
+        url: "https://cloudapi.bytedance.net/faas/services/tttrpy/invoke/translate",
+        method: "POST",
+        data: {
+          textList,
+          targetLang: translateLang[i],
+        },
+      });
+      (data as Array<ITranslateResult>).forEach((item) => {
+        const key = record.get(item.source) as string;
+        this.storeUsedTranslated[translateLang[i]][this.namespace[0]][key] =
+          item.translated;
+      });
+    }
   }
 }
 

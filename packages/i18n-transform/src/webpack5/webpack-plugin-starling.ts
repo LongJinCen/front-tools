@@ -51,6 +51,7 @@ class WebpackPluginStarling {
             stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
           },
           async (assets, callback) => {
+            await this.langManager.handleNoTranslate();
             const storeUsedTranslated = JSON.stringify(
               this.langManager.storeUsedTranslated
             );

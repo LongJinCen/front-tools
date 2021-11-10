@@ -58,3 +58,8 @@ export interface IStoreRecord {
 }
 
 export type TParserCallback = (text: string) => string;
+
+export interface ITranslateResult {
+  source: string;
+  translated: string;
+}
