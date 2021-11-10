@@ -1,6 +1,6 @@
 {
   "name": "@ad/i18n-transform",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "国际化文案自动替换工具",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
