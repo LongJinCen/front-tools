@@ -183,6 +183,8 @@ class LangManager {
       forEach(value, (text, key) => {
         record.set(text, key);
         textList.push(text);
+        // 目前 storeUsedTranslated 中的 zh 部分未包含未翻译的文案，所以需要更新
+        this.storeUsedTranslated.zh[this.namespace[0]][key] = text;
       });
     });
     const translateLang = this.lang.slice(1);
