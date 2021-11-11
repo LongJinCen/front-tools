@@ -70,9 +70,11 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
         "ja",
         "zh",
       ]);
-      const noDuplicate = langManager.getNoTranslateWithOutDuplicate();
-      forEach(noDuplicate, (value, key) => {
-        excelData.push([key, value]);
+      const storeUsedNoTranslated = langManager.storeUsedNoTranslated;
+      forEach(storeUsedNoTranslated, (record) => {
+        forEach(record, (value, key) => {
+          excelData.push([key, value]);
+        });
       });
       const arrayBuffer = xslx.build([
         {
@@ -88,13 +90,10 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
       });
 
       // 生成未翻译的文案，按文件维度划分，方便开发人员查看
-      const storeUsedNoTranslated = JSON.stringify(
-        langManager.storeUsedNoTranslated
-      );
       this.emitFile({
         type: "asset",
         fileName: `${withOutTransFileName}.json`,
-        source: storeUsedNoTranslated,
+        source: JSON.stringify(storeUsedNoTranslated),
       });
 
       // 生成包含比较运算的记录文件

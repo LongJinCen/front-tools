@@ -11,14 +11,17 @@ import {
 class LangManager {
   // store 用于查找，存储初始化接口返回的原始数据
   public store: IStore = {};
-  // 记录已翻译的文案
+  // 所有的替换记录，按文件维度换分，包含已翻译和未翻译的
+  public storeUsed: IStoreRecord = {};
+  // 输出的语言包，不包含未翻译的，最后的阶段会把未翻译的进行机翻然后更新到当前对象中
   public storeUsedTranslated: IStoreUsed = {};
   // 记录未翻译的文案
   public storeUsedNoTranslated: IStoreRecord = {};
-  // 所有的替换记录，按文件维度换分，包含已翻译和未翻译的
-  public storeUsed: IStoreRecord = {};
   // 记录包含中文等运算的位置
   public storeEqualRecord: IStoreRecordEqual = {};
+
+  // 用于记录查找中文对应的 key 时的查找结果。
+  private keyPathRecord: Map<string, string> = new Map();
 
   constructor(
     public namespace: string[],
@@ -77,10 +80,18 @@ class LangManager {
    * @param text
    * @returns string
    */
-  getKeyByText(text: string, filePath: string) {
+  getKeyByText(text: string, filePath: string): string {
+    /** 初始化 */
+    this.storeUsedNoTranslated[filePath] =
+      this.storeUsedNoTranslated[filePath] || {};
+    this.storeUsed[filePath] = this.storeUsed[filePath] || {};
+    /** 使用缓存 */
+    if (this.keyPathRecord.get(text)) {
+      return this.keyPathRecord.get(text) as string;
+    }
     let keyPath = "";
     let key = "";
-    // 从中文下的命名空间中查找即可
+    /** 查找 */
     forEach(this.store.zh, (value, namespace) => {
       const current = value[1].get(text);
       if (current) {
@@ -89,25 +100,24 @@ class LangManager {
         return false;
       }
     });
-    // 没有则生成一个 key, 将未翻译的文案存储起来, 默认存储到 namespace[0] 中
+    /** 查找无结果，生成随机 keyPath，否则将用到的文案和对应的翻译文案以及对应的 key 记录 */
     if (!keyPath) {
       const random = Math.random().toString().slice(-5);
       const newKey = (key = `${random}_${Date.now().toString().slice(-6)}`);
       keyPath = `${this.namespace[0]}.${newKey}`;
-      // 记录未翻译的文案跟对应的 key。方便后续机翻和输出未翻译的记录
-      (this.storeUsedNoTranslated[filePath] ||
-        (this.storeUsedNoTranslated[filePath] = {}))[newKey] = text;
-      // 每次访问 getKeyByText 传入的文案表示当前需要使用
+      this.storeUsedNoTranslated[filePath][newKey] = text;
     } else {
       this.copyStore2UsedStore(keyPath);
     }
-    // 记录每个文件的翻译文案跟对应的 key
-    (this.storeUsed[filePath] || (this.storeUsed[filePath] = {}))[key] = text;
+    /** 对用到的文案进行记录 */
+    this.storeUsed[filePath][key] = text;
+    /** 缓存起来方便下次使用，也可以起到去重的效果 */
+    this.keyPathRecord.set(text, keyPath);
     return keyPath;
   }
 
   /**
-   * 将使用到的文案 copy 到 storeUsedTranslated 当中
+   * 将使用到的文案跟对应的翻译都 copy 到 storeUsedTranslated 当中
    * @param keyPath
    */
   copyStore2UsedStore(keyPath: string) {
@@ -153,24 +163,6 @@ class LangManager {
         }
       }
     }
-  }
-
-  /**
-   * storeUsedNoTranslated 中会存在重复的中文文案，做去重处理
-   */
-  getNoTranslateWithOutDuplicate() {
-    const record = new Map();
-    const result: Record<string, string> = {};
-    forEach(this.storeUsedNoTranslated, (value) => {
-      forEach(value, (text, key) => {
-        if (record.get(text)) {
-          return;
-        }
-        result[key] = text;
-        record.set(text, key);
-      });
-    });
-    return result;
   }
 
   /**

@@ -87,10 +87,12 @@ class WebpackPluginStarling {
               "ja",
               "zh",
             ]);
-            const noDuplicate =
-              this.langManager.getNoTranslateWithOutDuplicate();
-            forEach(noDuplicate, (value, key) => {
-              excelData.push([key, value]);
+            const storeUsedNoTranslated =
+              this.langManager.storeUsedNoTranslated;
+            forEach(storeUsedNoTranslated, (record) => {
+              forEach(record, (value, key) => {
+                excelData.push([key, value]);
+              });
             });
             const arrayBuffer = xslx.build([
               {
@@ -104,12 +106,9 @@ class WebpackPluginStarling {
             );
 
             // 生成未翻译的文案，按文件维度划分，方便开发人员查看
-            const storeUsedNoTranslated = JSON.stringify(
-              this.langManager.storeUsedNoTranslated
-            );
             compilation.emitAsset(
               `${this.options.withOutTransFileName}.json`,
-              new RawSource(storeUsedNoTranslated)
+              new RawSource(JSON.stringify(storeUsedNoTranslated))
             );
 
             // 生成包含比较运算的记录文件
