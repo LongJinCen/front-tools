@@ -4,10 +4,10 @@ import { forEach } from "lodash";
 import { Buffer } from "buffer";
 import { defaultOptions } from "./../const";
 import LangManager from "../lang-manager";
-import { IViteOptionsInternal, IViteOptionsOut } from "../types";
+import { IViteHTML, IViteOptionsInternal, IViteOptionsOut } from "../types";
 import parser from "../parser";
 
-const i18nTransform = (options: IViteOptionsOut): Plugin => {
+const i18nTransform = (options: IViteOptionsOut): Plugin & IViteHTML => {
   const normalizedOptions = Object.assign(
     defaultOptions,
     options
@@ -39,7 +39,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
       );
       this.emitFile({
         type: "asset",
-        fileName: `assets/${langFileName}`,
+        fileName: langFileName,
         source: `var ${langGlobalFuncName} = ${storeUsedTranslated}`,
       });
 
@@ -120,6 +120,19 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
         equalRecordCb
       );
       return transformedSurce.code;
+    },
+    transformIndexHtml(html) {
+      return {
+        html,
+        tags: [
+          {
+            tag: "script",
+            attrs: {
+              src: `/${langFileName}`,
+            },
+          },
+        ],
+      };
     },
   };
 };
