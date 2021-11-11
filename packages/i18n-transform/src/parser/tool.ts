@@ -82,10 +82,10 @@ export const judgeBinaryExpreIncludeChinese = (
 //   var locale = (matched && matched[1]) || "zh";
 //   window.$at = function (key, args) {
 //     args = args || [];
-//     var keys = locale["zh"].push(key.split("."));
+//     var keys = [locale].concat(key.split("."));
 //     function findTranslated(lang) {
 //       var flag = true;
-//       return keys.reduce((pre, cur) => {
+//       return keys.reduce(function (pre, cur) {
 //         if (!flag || !pre[cur]) {
 //           flag = false;
 //           return;
@@ -93,9 +93,12 @@ export const judgeBinaryExpreIncludeChinese = (
 //         return pre[cur];
 //       }, lang);
 //     }
-//     return (
+//     var translated =
 //       findTranslated(window.platform_component_lang) ||
-//       findTranslated(window.platform_future_lang)
-//     );
+//       findTranslated(window.platform_future_lang);
+//     var index = 0;
+//     return translated.replace(/\{\d+?\}/g, function () {
+//       return args[index++];
+//     });
 //   };
 // })();
