@@ -1,13 +1,13 @@
 import xslx from "node-xlsx";
-import { Plugin } from "rollup";
 import { forEach } from "lodash";
 import { Buffer } from "buffer";
+import { Plugin } from "vite";
 import { defaultOptions } from "./../const";
 import LangManager from "../lang-manager";
-import { IViteHTML, IViteOptionsInternal, IViteOptionsOut } from "../types";
+import { IViteOptionsInternal, IViteOptionsOut } from "../types";
 import parser from "../parser";
 
-const i18nTransform = (options: IViteOptionsOut): Plugin & IViteHTML => {
+const i18nTransform = (options: IViteOptionsOut): Plugin => {
   const normalizedOptions = Object.assign(
     defaultOptions,
     options
@@ -24,10 +24,14 @@ const i18nTransform = (options: IViteOptionsOut): Plugin & IViteHTML => {
     verbose,
   } = normalizedOptions;
   const langManager = new LangManager(namespace, lang, apikey, mode);
+  let base: string;
   return {
     name: "i18n-transform",
     async buildStart() {
       await langManager.loadData();
+    },
+    configResolved(config) {
+      base = config.base || "";
     },
     async buildEnd(error) {
       // 翻译未翻译的语言
@@ -128,7 +132,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin & IViteHTML => {
           {
             tag: "script",
             attrs: {
-              src: `/${langFileName}`,
+              src: `${base}${langFileName}`,
             },
           },
         ],

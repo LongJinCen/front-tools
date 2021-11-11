@@ -76,3 +76,26 @@ export const judgeBinaryExpreIncludeChinese = (
   traverse(node);
   return result;
 };
+
+// (function () {
+//   var matched = document.cookie.match(/locale=(\w+)/);
+//   var locale = (matched && matched[1]) || "zh";
+//   window.$at = function (key, args) {
+//     args = args || [];
+//     var keys = locale["zh"].push(key.split("."));
+//     function findTranslated(lang) {
+//       var flag = true;
+//       return keys.reduce((pre, cur) => {
+//         if (!flag || !pre[cur]) {
+//           flag = false;
+//           return;
+//         }
+//         return pre[cur];
+//       }, lang);
+//     }
+//     return (
+//       findTranslated(window.platform_component_lang) ||
+//       findTranslated(window.platform_future_lang)
+//     );
+//   };
+// })();

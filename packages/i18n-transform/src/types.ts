@@ -72,7 +72,3 @@ export interface ITranslateResult {
   source: string;
   translated: string;
 }
-
-export interface IViteHTML {
-  transformIndexHtml: (html: string) => any;
-}
