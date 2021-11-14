@@ -3,7 +3,8 @@
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "outDir": "dist"
   },
   "include": ["src/**/*"]
 }

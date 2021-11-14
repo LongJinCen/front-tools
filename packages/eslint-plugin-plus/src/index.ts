@@ -1,14 +1,10 @@
-import nodeCore from './config/node-core'
-import platformComponent from './config/platform-component'
-import platformFuture from './config/platform-future'
+import node from "./config/node";
+import browser from "./config/browser";
 
 export = {
-  rules: {
-
-  },
+  rules: {},
   configs: {
-    platformComponent,
-    nodeCore,
-    platformFuture
-  }
-}
+    browser,
+    node,
+  },
+};

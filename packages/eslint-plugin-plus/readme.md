@@ -1,7 +1,5 @@
 # @ad/eslint-plugin-ad
 
-所有的 ts [rule](https://code.byted.org/ad/platform_eslint/blob/feature/lint/src/rules/_typescript-all.ts)，vue 的待更新
-
 # Table of content
 
 - **Table of content**
@@ -29,13 +27,12 @@
 
 ## Design
 
-为了保证规则的可复用性，考虑到不同项目未来可能会有一些定制化的规则，所以针对 `ts`、`vue3` 会有一套公共的规则集，同时针对不同的项目需要新建不同的 `config` 并继承这一套公共的配置。
+为了保证规则的可复用性，考虑到不同项目未来可能会有一些定制化的规则，所以针对 `ts`、`vue3` 会有一套公共的规则集，可以针对不同的项目新建不同的 `config` 并继承这一套公共的配置。
 
-目前，提供了针对三个项目的规则集：
+目前提供了两套配置
 
-- node_core
-- platform_component：
-- platform_future：
+- browser
+- node
 
 另外还特地接入了 `Prettier`，它能在我们编写代码时，无需关注代码格式统一问题，自动识别当前的文件类型，保存后自动格式化当前文件的代码（也能通过 cli 对整个项目进行一次格式化），且无需像 eslint 一样配置各种规则，且支持各种语言，在代码格式化方面，它比 eslint 更专业，能为我们省不少时间。
 
@@ -47,7 +44,7 @@
 
 ```shell
 # 安装该插件
-npm i @ad/eslint-plugin-ad --save-dev
+npm i eslint-plugin-plus --save-dev
 # 安装 prettier 模块
 npm i prettier --save-dev --save-exact
 ```
