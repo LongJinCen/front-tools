@@ -1,6 +1,6 @@
 {
   "name": "@longjincen/axios-utils",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "常用请求能力封装",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
