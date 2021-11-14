@@ -1,6 +1,6 @@
 {
   "name": "axios-utils",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "常用请求能力封装",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-plus",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "收敛常用 eslint 规则集",
   "main": "dist/index.js",
   "module": "dist/index.js",
