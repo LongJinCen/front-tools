@@ -16,6 +16,7 @@
   "bugs": {
     "url": "https://github.com/LongJinCen/front-tools/issues"
   },
+  "private": "true",
   "homepage": "https://github.com/LongJinCen/front-tools#readme",
   "workspaces": [
     "packages/*"
