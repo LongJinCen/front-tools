@@ -1,5 +1,5 @@
 {
-  "name": "axios-utils",
+  "name": "@ljc/axios-utils",
   "version": "1.7.5",
   "description": "常用请求能力封装",
   "main": "./dist/index.js",
