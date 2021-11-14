@@ -136,7 +136,7 @@ class LangManager {
    * @param lang
    */
   starlingUrl(namespace: string, lang: string) {
-    return `https://starling.snssdk.com/check_and_get_text/${this.apikey}/${this.mode}/${namespace}?lang=${lang}`;
+    return ``;
   }
 
   /**
@@ -182,7 +182,7 @@ class LangManager {
     const translateLang = this.lang.slice(1);
     for (let i = 0; i < translateLang.length; i++) {
       const { data } = await axios({
-        url: "https://cloudapi.bytedance.net/faas/services/tttrpy/invoke/translate",
+        url: "",
         method: "POST",
         data: {
           textList,
