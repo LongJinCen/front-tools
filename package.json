@@ -1,0 +1,23 @@
+{
+  "name": "front-tools",
+  "version": "1.0.0",
+  "description": "前端插件、工具相关收敛",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LongJinCen/front-tools.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LongJinCen/front-tools/issues"
+  },
+  "homepage": "https://github.com/LongJinCen/front-tools#readme",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
