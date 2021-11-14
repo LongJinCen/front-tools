@@ -1,19 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
     "target": "ES2019",
     "module": "commonjs",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "Src/*": ["./src/*"]
-    },
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "dist",
-    "declaration": true
+    "baseUrl": "."
   },
   "include": ["src/**/*"]
 }

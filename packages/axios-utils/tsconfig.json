@@ -1,20 +1,9 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
     "target": "es5",
     "module": "esnext",
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "Src/*": ["./src/*"],
-    },
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "outDir": "dist",
-    "declaration": true,
-    "skipLibCheck": true
+    "baseUrl": "."
   },
   "include": ["src/**/*"]
 }

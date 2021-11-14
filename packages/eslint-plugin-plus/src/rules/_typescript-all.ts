@@ -989,7 +989,7 @@ export default {
           toAppend.push(devDepWithTs);
         }
         return [...result, ...toAppend];
-      }, []),
+      }, [] as string[]),
     },
   ],
 

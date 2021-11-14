@@ -1,3 +1,3 @@
 import { interceptorsResponseConfig } from "Src/types/interceptors";
 
-export const baseInterceptors: interceptorsResponseConfig = {};
+// export const baseInterceptors: interceptorsResponseConfig = {};

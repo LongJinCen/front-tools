@@ -2,7 +2,10 @@
   "name": "front-tools",
   "version": "1.0.0",
   "description": "前端插件、工具相关收敛",
-  "scripts": {},
+  "scripts": {
+    "build": "lerna run build",
+    "clean-dist": "lerna exec 'rm -rf dist'"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LongJinCen/front-tools.git"
