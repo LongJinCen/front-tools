@@ -1,5 +1,5 @@
 {
-  "name": "@longjincen/axios-utils",
+  "name": "axios-utils-ljc",
   "version": "1.7.7",
   "description": "常用请求能力封装",
   "main": "./dist/index.js",
@@ -21,6 +21,5 @@
   },
   "peerDependencies": {
     "axios": "^0.21.4"
-  },
-  "gitHead": "0d149d539e9b66d999d0a9071f44bed83e05ef05"
+  }
 }
