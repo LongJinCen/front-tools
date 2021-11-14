@@ -1,6 +1,6 @@
 {
   "name": "i18n-transform",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "国际化文案自动替换工具",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -17,7 +17,6 @@
   ],
   "author": "longjincen@bytedance.com",
   "license": "ISC",
-  "devDependencies": {},
   "dependencies": {
     "@babel/generator": "^7.16.0",
     "@babel/parser": "^7.16.2",
