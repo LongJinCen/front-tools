@@ -21,6 +21,5 @@
   },
   "peerDependencies": {
     "axios": "^0.21.4"
-  },
-  "gitHead": "ee57e333a793912eefcc66b2fe43ce1329c2b897"
+  }
 }
