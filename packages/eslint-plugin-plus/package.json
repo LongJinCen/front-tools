@@ -1,25 +1,21 @@
 {
-  "name": "@ad/eslint-plugin-ad",
+  "name": "eslint-plugin-plus",
   "version": "1.2.8",
-  "description": "投放平台 eslint 规则集",
+  "description": "收敛常用 eslint 规则集",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
     "build": "tsc"
   },
   "repository": {
-    "type": "git",
-    "url": "ssh://git@code.byted.org/ad/platform_eslint"
+    "type": "git"
   },
-  "homepage": "https://code.byted.org/ad/platform_eslint",
   "files": [
     "dist"
   ],
-  "author": "longjincen.try@bytedance.com",
+  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "typescript": "^4.4.3"
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "eslint": "^7.32.0"
   },

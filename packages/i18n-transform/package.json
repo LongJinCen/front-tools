@@ -1,5 +1,5 @@
 {
-  "name": "@ad/i18n-transform",
+  "name": "i18n-transform",
   "version": "1.5.5",
   "description": "国际化文案自动替换工具",
   "main": "./dist/index.js",
@@ -10,32 +10,14 @@
     "test": "jest"
   },
   "repository": {
-    "type": "git",
-    "url": "git@code.byted.org:ad/platform_request.git"
+    "type": "git"
   },
-  "homepage": "https://code.byted.org/ad/i18n-transform",
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "http://bnpm.byted.org"
-  },
   "author": "longjincen@bytedance.com",
   "license": "ISC",
-  "devDependencies": {
-    "@types/babel__generator": "^7.6.3",
-    "@types/babel__traverse": "^7.14.2",
-    "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.176",
-    "@types/node-xlsx": "^0.15.2",
-    "@types/webpack": "^5.28.0",
-    "jest": "^27.3.1",
-    "ts-jest": "^27.0.7",
-    "typescript": "^4.3.5",
-    "webpack-cli": "^4.7.2",
-    "webpack": "^5.46.0",
-    "vite": "^2.6.14"
-  },
+  "devDependencies": {},
   "dependencies": {
     "@babel/generator": "^7.16.0",
     "@babel/parser": "^7.16.2",

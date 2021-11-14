@@ -1,0 +1,26 @@
+{
+  "name": "axios-utils",
+  "version": "1.7.1",
+  "description": "常用请求能力封装",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "files": [
+    "dist"
+  ],
+  "author": "",
+  "devDependencies": {},
+  "dependencies": {
+    "axios": "^0.21.4",
+    "lodash-es": "^4.17.21"
+  },
+  "peerDependencies": {
+    "axios": "^0.21.4"
+  }
+}
