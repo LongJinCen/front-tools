@@ -1,9 +1,6 @@
 export = {
-  extends: [
-    './_typescript.js',
-    'prettier'
-  ],
+  extends: ["./config/_typescript.js", "prettier"],
   env: {
-    node: true
-  }
-}
+    node: true,
+  },
+};

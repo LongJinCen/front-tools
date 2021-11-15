@@ -1,0 +1,5 @@
+# eslint 默认忽略 node_module、"." 开头的文件。 
+
+*.js
+dist
+tsconfig.tsbuildinfo

@@ -55,7 +55,13 @@ npm i prettier --save-dev --save-exact
 // 将默认的 formatter 设置为 prettier
     "editor.defaultFormatter": "esbenp.prettier-vscode",
 // 设置保存时自动 format
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+// 适用于 monorepo
+    "eslint.workingDirectories": [
+      {
+        "pattern": "./packages/*"
+      }
+    ]
 ```
 
 安装 **eslint vscode** 插件，这样编辑器能给我们错误提示

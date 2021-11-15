@@ -1,0 +1,5 @@
+{
+  "root": true,
+  "extends": ["plugin:eslint-plugin-plus/node"],
+  "plugins": ["eslint-plugin-plus"]
+}

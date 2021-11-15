@@ -6,7 +6,7 @@
     "build": "tsc --build ./tsconfig.build.json --verbose",
     "test": "lerna run test --stream",
     "build-each": "lerna run build --stream",
-    "clean-dist": "lerna exec 'rm -rf dist'"
+    "clean-dist": "lerna exec 'rm -rf dist tsconfig.tsbuildinfo'"
   },
   "repository": {
     "type": "git",
@@ -23,17 +23,17 @@
   "workspaces": [
     "packages/*"
   ],
-  "dependencies": {},
   "devDependencies": {
-    "@types/node-xlsx": "^0.15.2",
-    "@types/babel__traverse": "^7.14.2",
     "@types/babel__generator": "^7.6.3",
+    "@types/babel__traverse": "^7.14.2",
     "@types/jest": "^27.0.1",
     "@types/js-cookie": "^2.2.7",
     "@types/lodash": "^4.14.172",
     "@types/lodash-es": "^4.17.5",
+    "@types/node-xlsx": "^0.15.2",
     "@types/qs": "^6.9.7",
     "@types/webpack": "^5.28.0",
+    "eslint": "^7.32.0",
     "jest": "^27.0.6",
     "ts-jest": "^27.0.4",
     "typescript": "^4.3.5",
