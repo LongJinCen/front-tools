@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "前端插件、工具相关收敛",
   "scripts": {
-    "build": "lerna run build --stream",
+    "build": "tsc --build ./tsconfig.build.json --verbose",
+    "test": "lerna run test --stream",
+    "build-each": "lerna run build --stream",
     "clean-dist": "lerna exec 'rm -rf dist'"
   },
   "repository": {

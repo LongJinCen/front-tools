@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/axios-utils" },
+    { "path": "packages/eslint-plugin-plus" },
+    { "path": "packages/i18n-transform" }
+  ]
+}
