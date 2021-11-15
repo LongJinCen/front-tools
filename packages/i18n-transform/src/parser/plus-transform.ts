@@ -5,7 +5,7 @@ import {
   isStringLiteral,
   isBinaryExpression,
 } from "@babel/types";
-import { TParserTranslateCb } from "Src/types";
+import { TParserTranslateCb } from "../types";
 import { splitText } from "./regular";
 import { generateReplaceNode } from "./tool";
 
@@ -22,7 +22,7 @@ function plusTransform(
   funcName: string
 ): void {
   // 字符串数组
-  let textArr: string[] = [];
+  const textArr: string[] = [];
   // 插值
   const variable = arrayExpression();
   // 遍历 BinaryExpression
@@ -49,10 +49,11 @@ function plusTransform(
   let index = 0;
   textArr.forEach((item) => {
     if (item === "{}") {
-      beforeTranslate += `{${index++}}`;
+      beforeTranslate += `{${index}}`;
     } else {
       beforeTranslate += item;
     }
+    index += 1;
   });
   // 源文案前后可能会存在空格、换行符，需要处理
   const { before, middle: finalText, after } = splitText(beforeTranslate);

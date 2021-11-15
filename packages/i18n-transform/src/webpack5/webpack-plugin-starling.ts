@@ -8,7 +8,9 @@ import { defaultOptions } from "../const";
 
 class WebpackPluginStarling {
   defaultOptions = defaultOptions;
+
   options: IWebpackOptionsInternal;
+
   langManager!: LangManager;
 
   constructor(options: IWebpackOptionsOut) {
@@ -24,12 +26,14 @@ class WebpackPluginStarling {
     );
   }
 
-  apply(compiler: Webpack.Compiler) {
+  apply(compiler: Webpack.Compiler): void {
     // 拉取 starling 数据，挂载到 compiler 上
     compiler.hooks.beforeRun.tapAsync(
       "WebpackPluginStarling",
-      async (compiler, callback) => {
-        (compiler as any).langManager = this.langManager;
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      async (_compiler, callback) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        (_compiler as any).langManager = this.langManager;
         try {
           await this.langManager.loadData();
         } catch (error: any) {
@@ -50,7 +54,8 @@ class WebpackPluginStarling {
             name: "WebpackPluginStarling",
             stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE,
           },
-          async (assets, callback) => {
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          async (_assets, callback) => {
             // 对未翻译的文案进行翻译
             await this.langManager.handleNoTranslate();
 
@@ -87,8 +92,7 @@ class WebpackPluginStarling {
               "ja",
               "zh",
             ]);
-            const storeUsedNoTranslated =
-              this.langManager.storeUsedNoTranslated;
+            const { storeUsedNoTranslated } = this.langManager;
             forEach(storeUsedNoTranslated, (record) => {
               forEach(record, (value, key) => {
                 excelData.push([key, value]);

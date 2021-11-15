@@ -1,4 +1,4 @@
-export type Mode =
+export type TMode =
   | "normal" // 拉取正式环境
   | "test" // 拉取测试环境
   | "gray"; // 拉取灰度环境
@@ -7,7 +7,7 @@ export interface IWebpackOptionsInternal {
   // starling项目唯一apikey
   apikey: string;
   namespace: string[];
-  mode: Mode;
+  mode: TMode;
   lang: string[];
   langFileName: string;
   langGlobalFuncName: string;
@@ -19,7 +19,7 @@ export interface IWebpackOptionsOut {
   // starling项目唯一apikey
   apikey: string;
   namespace: string[];
-  mode?: Mode;
+  mode?: TMode;
   lang?: string[];
   langFileName?: string;
   langGlobalFuncName?: string;
@@ -33,6 +33,7 @@ export interface IViteOptionsInternal extends IWebpackOptionsInternal {
 
 export interface IViteOptionsOut extends IWebpackOptionsOut {
   funcName?: string;
+  test?: (path: string) => boolean;
 }
 
 export interface IStore {

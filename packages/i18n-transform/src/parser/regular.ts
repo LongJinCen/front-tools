@@ -3,14 +3,16 @@
  * @param text
  * @returns
  */
-export const isIncludeChinese = (text: string) => /[\u4e00-\u9fa5]+/.test(text);
+export const isIncludeChinese = (text: string): boolean =>
+  /[\u4e00-\u9fa5]+/.test(text);
 
 /**
  * 纯中文的字符串
  * @param text
  * @returns
  */
-export const isChinese = (text: string) => /^[\u4e00-\u9fa5]+$/.test(text);
+export const isChinese = (text: string): boolean =>
+  /^[\u4e00-\u9fa5]+$/.test(text);
 
 /**
  * @description 判断是否是复数，
@@ -19,11 +21,11 @@ export const isChinese = (text: string) => /^[\u4e00-\u9fa5]+$/.test(text);
  * @param text
  * @returns
  */
-export const isPlural = (text: string) => {
+export const isPlural = (text: string): boolean => {
   if (!/^\d+/.test(text)) {
     return false;
   }
-  const textWithOutNumber = text.match(/^\d+([\u4e00-\u9fa5]+)/);
+  const textWithOutNumber = /^\d+([\u4e00-\u9fa5]+)/.exec(text);
   if (!textWithOutNumber) {
     return false;
   }
@@ -39,7 +41,7 @@ export const isPlural = (text: string) => {
  * @returns
  */
 export const getPlural = (text: string) => {
-  const matched = text.match(/^(\d+)([\u4e00-\u9fa5]+)/);
+  const matched = /^(\d+)([\u4e00-\u9fa5]+)/.exec(text);
   return {
     number: matched && +matched[1],
     info: matched && matched[2],
@@ -51,7 +53,7 @@ export const getPlural = (text: string) => {
  * @param text
  */
 export const splitText = (text: string) => {
-  const matched = text.match(/^(\s*)([\w\W]+?)(\s*)$/) as RegExpMatchArray;
+  const matched = /^(\s*)([\w\W]+?)(\s*)$/.exec(text) as RegExpMatchArray;
 
   return {
     before: matched[1],

@@ -1,15 +1,17 @@
 import { LoaderContext } from "webpack";
+import { IViteOptionsOut } from "../types";
 import parser from "../parser";
 import LangManager from "../lang-manager";
 
 function I18nTransformLoader(this: LoaderContext<any>, source: string) {
-  const { funcName = "$at", test } = this.getOptions();
+  const { funcName = "$at", test } = this.getOptions() as IViteOptionsOut;
   if (test && !test(this.resourcePath)) {
     return source;
   }
   if (/node_modules/.test(this.resourcePath)) {
     return source;
   }
+  // eslint-disable-next-line
   const langManager: LangManager = (this._compiler as any).langManager;
   const filename = this.resourcePath;
   const translateCb = (text: string) =>

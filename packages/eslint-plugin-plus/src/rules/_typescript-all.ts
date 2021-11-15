@@ -1,5 +1,5 @@
 export default {
-  /** -------- 开启的 eslint 规则 ---------**/
+  /** -------- 开启的 eslint 规则 ---------* */
 
   // enforces return statements in callbacks of array's methods
   // https://eslint.org/docs/rules/array-callback-return
@@ -876,7 +876,7 @@ export default {
   // disallow use of undefined when initializing variables
   "no-undef-init": "error",
 
-  /** -------- typescript-eslint 插件的规则 ---------**/
+  /** -------- typescript-eslint 插件的规则 ---------* */
 
   "@typescript-eslint/adjacent-overload-signatures": "error",
   "@typescript-eslint/ban-types": "error",

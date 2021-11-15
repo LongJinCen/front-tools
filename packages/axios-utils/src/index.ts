@@ -1,15 +1,18 @@
 import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
+import { IResponseCustom } from "./types/common";
 // import * as requestInterceptors from "./interceptors/request";
 // import * as responseInterceptors from "./interceptors/response";
 // import * as responseInterceptorsPlus from "././interceptors/response-plus";
 // import { addRequestIntercept, addResponseIntercept } from "./tool";
-const CancelToken = axios.CancelToken;
+const { CancelToken } = axios;
 
 const instance = axios.create();
 const instancePlus = axios.create();
 
 // post请求默认设置 Content-Type 为 json
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 instance.defaults.headers.post["Content-Type"] = "application/json";
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 instancePlus.defaults.headers.post["Content-Type"] = "application/json";
 
 // 请求拦截器
@@ -45,7 +48,9 @@ const request =
       source = CancelToken.source();
       config.cancelToken = source.token;
     }
-    let result = instance(config).then((res) => res.data.data);
+    const result = instance(config).then(
+      (res) => (res.data as IResponseCustom).data as R
+    );
     if (config.cancleable) {
       cancleMap.set(result, source as CancelTokenSource);
     }
@@ -71,7 +76,7 @@ const requestPlus =
       source = CancelToken.source();
       config.cancelToken = source.token;
     }
-    let result = instancePlus(config).then((res) => res.data);
+    const result = instancePlus(config).then((res) => res.data as R);
     if (config.cancleable) {
       cancleMap.set(result, source as CancelTokenSource);
     }
@@ -91,7 +96,9 @@ const requestPlus =
 const requestEscape = <T = any, R = any>(
   config: AxiosRequestConfig & { data: T }
 ): Promise<R> => {
-  let result = instance(config).then((res) => res.data.data);
+  const result = instance(config).then(
+    (res) => (res.data as IResponseCustom).data as R
+  );
   return result;
 };
 
@@ -100,7 +107,7 @@ const requestEscape = <T = any, R = any>(
  *  - 取消某一个请求
  * @param promise
  */
-const abort = (promise: Promise<any>) => {
+const abort = (promise: Promise<any>): void => {
   const source = cancleMap.get(promise);
   if (source) {
     source.cancel("请求被取消");
@@ -139,12 +146,12 @@ const useCache = <
     const promise = func(value)
       .then((res) => {
         cacheResult.set(cachekey, res as R);
-        return res;
+        return res as R;
       })
       .finally(() => cachePromise.delete(cachekey));
 
-    cachePromise.set(cachekey, promise as Promise<R>);
-    return promise as Promise<R>;
+    cachePromise.set(cachekey, promise);
+    return promise;
   };
 };
 
@@ -168,7 +175,7 @@ const useDebounce = <
     cachePromise.length = 0;
     const promise = func(value);
     cachePromise.push(promise);
-    return promise;
+    return promise as Promise<R>;
   };
 };
 

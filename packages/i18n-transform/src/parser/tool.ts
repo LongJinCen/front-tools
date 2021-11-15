@@ -16,7 +16,8 @@ import { isIncludeChinese } from "./regular";
  *  - vue 模板中的字符串在经过编译后两边会存在空格跟字符串的情况
  * @param str
  */
-export const normalizeString = (str: string) => str.replace("\n", "").trim();
+export const normalizeString = (str: string): string =>
+  str.replace("\n", "").trim();
 
 /**
  * @param key 翻译文案对应的 key
@@ -61,15 +62,15 @@ export const judgeBinaryExpreIncludeChinese = (
   node: BinaryExpression
 ): boolean => {
   let result = false;
-  function traverse(node: Node | undefined | null) {
-    if (!node) {
+  function traverse(_node: Node | undefined | null) {
+    if (!_node) {
       return;
     }
-    if (isBinaryExpression(node)) {
-      traverse(node.left);
-      traverse(node.right);
+    if (isBinaryExpression(_node)) {
+      traverse(_node.left);
+      traverse(_node.right);
     }
-    if (isStringLiteral(node) && isIncludeChinese(node.value)) {
+    if (isStringLiteral(_node) && isIncludeChinese(_node.value)) {
       result = true;
     }
   }

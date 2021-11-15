@@ -1,9 +1,9 @@
-import { Mode } from "./types";
+import { TMode } from "./types";
 
 export const defaultOptions = {
   apikey: "",
   namespace: [],
-  mode: "normal" as Mode,
+  mode: "normal" as TMode,
   lang: ["zh", "en", "ja"],
   langFileName: "lang.js",
   langGlobalFuncName: "global_lang_package",

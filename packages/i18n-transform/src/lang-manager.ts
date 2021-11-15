@@ -11,12 +11,16 @@ import {
 class LangManager {
   // store 用于查找，存储初始化接口返回的原始数据
   public store: IStore = {};
+
   // 所有的替换记录，按文件维度换分，包含已翻译和未翻译的
   public storeUsed: IStoreRecord = {};
   // 输出的语言包，不包含未翻译的，最后的阶段会把未翻译的进行机翻然后更新到当前对象中
+
   public storeUsedTranslated: IStoreUsed = {};
   // 记录未翻译的文案
+
   public storeUsedNoTranslated: IStoreRecord = {};
+
   // 记录包含中文等运算的位置
   public storeEqualRecord: IStoreRecordEqual = {};
 
@@ -35,6 +39,7 @@ class LangManager {
       this.storeUsedTranslated[locale] = {};
       namespace.forEach((space) => {
         // 使用 map 降低时间复杂度
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         this.store[locale][space] = [new Map(), new Map()];
         this.storeUsedTranslated[locale][space] = {};
       });
@@ -51,7 +56,7 @@ class LangManager {
     namepspace: string,
     lang: string,
     source: Record<string, string>
-  ) {
+  ): void {
     const langMaps = this.store[lang][namepspace];
     forEach(source, (value, key) => {
       langMaps[0].set(key, value);
@@ -65,12 +70,12 @@ class LangManager {
    * @param line
    * @param cloumn
    */
-  recordRequal(filePath: string, line: number, cloumn: number) {
+  recordRequal(filePath: string, line: number, cloumn: number): void {
     if (!this.storeEqualRecord[filePath]) {
       this.storeEqualRecord[filePath] = [];
     }
     this.storeEqualRecord[filePath].push({
-      line: line,
+      line,
       column: cloumn,
     });
   }
@@ -103,7 +108,8 @@ class LangManager {
     /** 查找无结果，生成随机 keyPath，否则将用到的文案和对应的翻译文案以及对应的 key 记录 */
     if (!keyPath) {
       const random = Math.random().toString().slice(-5);
-      const newKey = (key = `${random}_${Date.now().toString().slice(-6)}`);
+      const newKey = `${random}_${Date.now().toString().slice(-6)}`;
+      key = newKey;
       keyPath = `${this.namespace[0]}.${newKey}`;
       this.storeUsedNoTranslated[filePath][newKey] = text;
     } else {
@@ -120,7 +126,7 @@ class LangManager {
    * 将使用到的文案跟对应的翻译都 copy 到 storeUsedTranslated 当中
    * @param keyPath
    */
-  copyStore2UsedStore(keyPath: string) {
+  copyStore2UsedStore(keyPath: string): void {
     forEach(this.store, (value, lang) => {
       const keyArr = keyPath.split(".");
       const prePath = keyArr.slice(0, keyArr.length - 1).join(".");
@@ -135,22 +141,24 @@ class LangManager {
    * @param namespace
    * @param lang
    */
-  starlingUrl(namespace: string, lang: string) {
-    return ``;
-  }
+  // starlingUrl(namespace: string, lang: string): string {
+  //   return ``;
+  // }
 
   /**
    * @description 根据 namespace 跟 Lang 拉取文案
    */
-  async loadData() {
+  async loadData(): Promise<any> {
     for (const space of this.namespace) {
       for (const locale of this.lang) {
         const {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           data: {
             message: { Data },
           },
+          // eslint-disable-next-line no-await-in-loop
         } = await axios({
-          url: this.starlingUrl(space, locale),
+          url: "",
         });
         this.addLangPackage(space, locale, Data);
 
@@ -168,7 +176,7 @@ class LangManager {
   /**
    * 将 storeUsedNoTranslated 未翻译的文案进行翻译 存储到 storeUsedTranslated 中
    */
-  async handleNoTranslate() {
+  async handleNoTranslate(): Promise<void> {
     const record = new Map<string, string>();
     const textList: string[] = [];
     forEach(this.storeUsedNoTranslated, (value) => {
@@ -180,7 +188,8 @@ class LangManager {
       });
     });
     const translateLang = this.lang.slice(1);
-    for (let i = 0; i < translateLang.length; i++) {
+    for (let i = 0; i < translateLang.length; i += 1) {
+      // eslint-disable-next-line
       const { data } = await axios({
         url: "",
         method: "POST",

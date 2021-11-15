@@ -1,3 +1,3 @@
-import { interceptorsResponseConfig } from "Src/types/interceptors";
+// import { TInterceptorsResponseConfig } from "Src/types/interceptors";
 
-// export const baseInterceptors: interceptorsResponseConfig = {};
+// export const baseInterceptors: TInterceptorsResponseConfig = {};

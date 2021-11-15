@@ -2,7 +2,7 @@ import xslx from "node-xlsx";
 import { forEach } from "lodash";
 import { Buffer } from "buffer";
 import { Plugin } from "vite";
-import { defaultOptions } from "./../const";
+import { defaultOptions } from "../const";
 import LangManager from "../lang-manager";
 import { IViteOptionsInternal, IViteOptionsOut } from "../types";
 import parser from "../parser";
@@ -33,7 +33,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
     configResolved(config) {
       base = config.base || "";
     },
-    async buildEnd(error) {
+    async buildEnd() {
       // 翻译未翻译的语言
       await langManager.handleNoTranslate();
 
@@ -70,7 +70,7 @@ const i18nTransform = (options: IViteOptionsOut): Plugin => {
         "ja",
         "zh",
       ]);
-      const storeUsedNoTranslated = langManager.storeUsedNoTranslated;
+      const { storeUsedNoTranslated } = langManager;
       forEach(storeUsedNoTranslated, (record) => {
         forEach(record, (value, key) => {
           excelData.push([key, value]);

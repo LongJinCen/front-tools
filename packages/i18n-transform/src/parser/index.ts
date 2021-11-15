@@ -1,10 +1,6 @@
 import { parse } from "@babel/parser";
-import { TParserEqualCb, TParserTranslateCb } from "Src/types";
-import babelGenerate from "@babel/generator";
+import babelGenerate, { GeneratorResult } from "@babel/generator";
 import traverse from "@babel/traverse";
-import plusTransform from "./plus-transform";
-import { isIncludeChinese, isPlural, getPlural, splitText } from "./regular";
-import { generateReplaceNode, judgeBinaryExpreIncludeChinese } from "./tool";
 import {
   BinaryExpression,
   arrayExpression,
@@ -13,6 +9,10 @@ import {
   isTemplateElement,
   TemplateElement,
 } from "@babel/types";
+import { TParserEqualCb, TParserTranslateCb } from "../types";
+import plusTransform from "./plus-transform";
+import { isIncludeChinese, isPlural, getPlural, splitText } from "./regular";
+import { generateReplaceNode, judgeBinaryExpreIncludeChinese } from "./tool";
 
 function I18nParser(
   source: string,
@@ -20,7 +20,7 @@ function I18nParser(
   funcName: string,
   translate: TParserTranslateCb,
   equalRecord: TParserEqualCb
-) {
+): GeneratorResult {
   const AST = parse(source, {
     sourceFilename,
     sourceType: "module",
@@ -47,7 +47,7 @@ function I18nParser(
       // 处理复数
       if (isPlural(finalText)) {
         const { number, info } = getPlural(finalText);
-        const key = translate(`{0}${info}`);
+        const key = translate(`{0}${info as string}`);
         const replaceNode = generateReplaceNode(
           key,
           before,
@@ -111,11 +111,11 @@ function I18nParser(
         let index = 0;
         sortedElement.forEach((item) => {
           if (isTemplateElement(item)) {
-            beforeTranslate =
-              beforeTranslate + (item as TemplateElement).value.cooked;
+            beforeTranslate += (item as TemplateElement).value.cooked;
           } else {
-            beforeTranslate = beforeTranslate + `{${index++}}`;
+            beforeTranslate += `{${index}}`;
           }
+          index += 1;
         });
         const { before, middle: finalText, after } = splitText(beforeTranslate);
         const key = translate(finalText);

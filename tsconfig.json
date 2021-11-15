@@ -9,9 +9,6 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "declaration": true,
-    "skipLibCheck": true,
-    "paths": {
-      "Src/*": ["./src/*"]
-    }
+    "skipLibCheck": true
   }
 }

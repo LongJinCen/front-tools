@@ -1,17 +1,23 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-type RequestCallback = (value: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>
-type RequestErrorCallback = (value: any) => any
+type TRequestCallback = (
+  value: AxiosRequestConfig
+) => AxiosRequestConfig | Promise<AxiosRequestConfig>;
+type TRequestErrorCallback = (value: any) => any;
 
-type ResponseCallback = (value: AxiosResponse) => AxiosResponse | Promise<AxiosResponse>
-type ResponseErrorCallback = (value: AxiosError) => AxiosResponse | Promise<AxiosResponse>
+type TResponseCallback = (
+  value: AxiosResponse
+) => AxiosResponse | Promise<AxiosResponse>;
+type TResponseErrorCallback = (
+  value: AxiosError
+) => AxiosResponse | Promise<AxiosResponse>;
 
-export type interceptorsRequestConfig = {
-  fufilled: RequestCallback,
-  reject?: RequestErrorCallback
-}
+export type TInterceptorsRequestConfig = {
+  fufilled: RequestCallback;
+  reject?: RequestErrorCallback;
+};
 
-export type interceptorsResponseConfig = {
-  fufilled: ResponseCallback,
-  reject?: ResponseErrorCallback
-}
+export type TInterceptorsResponseConfig = {
+  fufilled: ResponseCallback;
+  reject?: ResponseErrorCallback;
+};
