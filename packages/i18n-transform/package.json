@@ -23,6 +23,7 @@
     "@babel/traverse": "^7.16.0",
     "@babel/types": "^7.16.0",
     "axios": "^0.21.4",
+    "axios-utils-ljc": "^1.7.9",
     "lodash": "^4.17.21",
     "node-xlsx": "^0.17.2",
     "vite": "^2.6.14",
