@@ -161,6 +161,7 @@ const useCache = <
  * @param func
  * @returns {function}
  */
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const useDebounce = <
   F extends (value: any) => Promise<any>,
   T = F extends (value: infer K) => Promise<any> ? K : any,
