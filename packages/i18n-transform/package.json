@@ -1,6 +1,6 @@
 {
   "name": "i18n-runtime-gen",
-  "version": "1.5.14",
+  "version": "1.5.15",
   "description": "国际化文案自动替换工具",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -23,7 +23,7 @@
     "@babel/traverse": "^7.16.0",
     "@babel/types": "^7.16.0",
     "axios": "^0.21.4",
-    "axios-utils-ljc": "^1.7.12",
+    "axios-utils-ljc": "^1.7.13",
     "lodash": "^4.17.21",
     "node-xlsx": "^0.17.2",
     "vite": "^2.6.14",
