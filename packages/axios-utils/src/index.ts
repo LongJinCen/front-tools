@@ -180,6 +180,4 @@ const useDebounce = <
   };
 };
 
-console.log("this is a test");
-console.log("this is a test");
 export { request, requestPlus, requestEscape, abort, useCache, useDebounce };
