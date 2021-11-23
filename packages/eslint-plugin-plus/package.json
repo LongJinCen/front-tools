@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-plus",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "description": "收敛常用 eslint 规则集",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
-    "axios-utils-ljc": "^1.7.10",
+    "axios-utils-ljc": "^1.7.11",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-prettier": "^8.3.0",
