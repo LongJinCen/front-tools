@@ -10,7 +10,8 @@
     "test": "jest"
   },
   "repository": {
-    "type": "git"
+    "type": "git",
+    "test": ""
   },
   "files": [
     "dist"
