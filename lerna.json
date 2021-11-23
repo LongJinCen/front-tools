@@ -3,7 +3,8 @@
   "version": "independent",
   "command": {
     "publish": {
-      "ignoreChanges": [".*", "*.md"]
+      "ignoreChanges": [".*", "*.md"],
+      "registry": "https://registry.npmjs.org/"
     }
   }
 }
