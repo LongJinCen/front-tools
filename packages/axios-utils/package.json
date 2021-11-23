@@ -1,6 +1,6 @@
 {
   "name": "axios-utils-ljc",
-  "version": "1.7.14",
+  "version": "1.8.0",
   "description": "常用请求能力封装",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

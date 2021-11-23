@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/LongJinCen/front-tools/compare/i18n-runtime-gen@1.6.1...i18n-runtime-gen@1.6.2) (2021-11-23)
+
+**Note:** Version bump only for package i18n-runtime-gen
+
 # [1.6.0](https://github.com/LongJinCen/front-tools/compare/i18n-runtime-gen@1.5.15...i18n-runtime-gen@1.6.0) (2021-11-23)
 
 ### Features
